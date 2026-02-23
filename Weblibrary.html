@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>XGYM — Training Library</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%230a0a0a'/><text y='.9em' font-size='80' x='10' fill='%23c9a84c' font-family='Arial Black,sans-serif' font-weight='900'>X</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;600&family=Barlow+Condensed:wght@700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --white: #f5f2ec;
+    --gold: #c9a84c;
+    --gold-light: #e8c96a;
+    --mid: #141414;
+    --border: rgba(255,255,255,0.07);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Barlow', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 3rem;
+    background: rgba(10,10,10,0.97);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(10px);
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem; letter-spacing: 0.15em;
+    color: var(--white); text-decoration: none;
+  }
+  .nav-logo span { color: var(--gold); }
+  .nav-right { display: flex; align-items: center; gap: 2rem; }
+  .nav-back {
+    font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--white); opacity: 0.45; text-decoration: none;
+    transition: opacity 0.2s, color 0.2s;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .nav-back:hover { opacity: 1; color: var(--gold); }
+  .nav-cta {
+    background: var(--gold); color: var(--black);
+    padding: 0.6rem 1.5rem;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.8rem; letter-spacing: 0.2em; text-transform: uppercase;
+    font-weight: 700; text-decoration: none;
+    transition: background 0.2s;
+  }
+  .nav-cta:hover { background: var(--gold-light); }
+
+  /* HERO */
+  .hero {
+    padding: 5rem 3rem 3rem;
+    border-bottom: 1px solid var(--border);
+    max-width: 1400px; margin: 0 auto;
+  }
+  .hero-label {
+    font-size: 0.65rem; letter-spacing: 0.4em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 1rem;
+    display: flex; align-items: center; gap: 0.8rem;
+  }
+  .hero-label::before {
+    content: ''; display: block; width: 30px; height: 1px; background: var(--gold);
+  }
+  .hero h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3.5rem, 8vw, 7rem);
+    line-height: 0.9; letter-spacing: 0.02em;
+    margin-bottom: 1rem;
+  }
+  .hero h1 span { color: var(--gold); }
+  .hero-sub {
+    font-size: 1rem; opacity: 0.6; max-width: 500px; line-height: 1.7;
+  }
+
+  /* FILTER BAR */
+  .filter-bar {
+    position: sticky; top: 65px; z-index: 90;
+    background: rgba(10,10,10,0.97);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(10px);
+  }
+  .filter-inner {
+    max-width: 1400px; margin: 0 auto;
+    padding: 0 3rem;
+    display: flex; gap: 0; overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .filter-inner::-webkit-scrollbar { display: none; }
+  .filter-btn {
+    padding: 1.1rem 1.8rem;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.8rem; letter-spacing: 0.2em; text-transform: uppercase;
+    font-weight: 700; background: transparent; border: none;
+    color: var(--white); opacity: 0.4; cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: opacity 0.2s, border-color 0.2s, color 0.2s;
+    white-space: nowrap;
+  }
+  .filter-btn:hover { opacity: 0.8; }
+  .filter-btn.active {
+    opacity: 1; color: var(--gold);
+    border-bottom-color: var(--gold);
+  }
+
+  /* MAIN CONTENT */
+  .main {
+    max-width: 1400px; margin: 0 auto;
+    padding: 3rem;
+  }
+
+  /* SECTION */
+  .section { margin-bottom: 4rem; }
+  .section-header {
+    display: flex; align-items: baseline; gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem; letter-spacing: 0.05em;
+  }
+  .section-count {
+    font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--gold); opacity: 0.7;
+  }
+
+  /* VIDEO GRID */
+  .video-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+  }
+
+  /* VIDEO CARD */
+  .video-card {
+    background: var(--mid);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: border-color 0.2s, transform 0.2s;
+    overflow: hidden;
+  }
+  .video-card:hover { border-color: rgba(201,168,76,0.4); transform: translateY(-3px); }
+
+  .video-thumb {
+    position: relative; aspect-ratio: 16/9;
+    background: #1a1a1a; overflow: hidden;
+  }
+  .video-thumb iframe {
+    width: 100%; height: 100%; border: none;
+    pointer-events: none;
+  }
+  .video-thumb .play-overlay {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(10,10,10,0.3);
+    transition: background 0.2s;
+  }
+  .video-card:hover .play-overlay { background: rgba(10,10,10,0.1); }
+  .play-btn {
+    width: 52px; height: 52px; border-radius: 50%;
+    background: var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    transition: transform 0.2s, background 0.2s;
+  }
+  .video-card:hover .play-btn { transform: scale(1.1); background: var(--gold-light); }
+  .play-btn svg { width: 18px; height: 18px; fill: var(--black); margin-left: 3px; }
+
+  .video-info { padding: 1.2rem 1.4rem 1.4rem; }
+  .video-category {
+    font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 0.5rem;
+  }
+  .video-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.1rem; font-weight: 700; letter-spacing: 0.02em;
+    line-height: 1.3; margin-bottom: 0.5rem;
+  }
+  .video-desc {
+    font-size: 0.82rem; opacity: 0.45; line-height: 1.6;
+  }
+
+  /* MODAL */
+  .modal-overlay {
+    position: fixed; inset: 0; z-index: 1000;
+    background: rgba(0,0,0,0.92);
+    display: flex; align-items: center; justify-content: center;
+    padding: 2rem;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+  .modal {
+    width: 100%; max-width: 900px;
+    transform: translateY(20px); transition: transform 0.3s;
+  }
+  .modal-overlay.open .modal { transform: translateY(0); }
+  .modal-header {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    margin-bottom: 1rem;
+  }
+  .modal-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem; letter-spacing: 0.05em;
+  }
+  .modal-close {
+    background: none; border: none; color: var(--white);
+    font-size: 1.5rem; cursor: pointer; opacity: 0.5;
+    padding: 0.2rem 0.5rem; line-height: 1;
+    transition: opacity 0.2s;
+  }
+  .modal-close:hover { opacity: 1; }
+  .modal-video {
+    position: relative; aspect-ratio: 16/9;
+    background: #000;
+  }
+  .modal-video iframe {
+    width: 100%; height: 100%; border: none;
+  }
+  .modal-category {
+    font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 0.4rem;
+  }
+
+  /* EMPTY STATE */
+  .empty {
+    text-align: center; padding: 5rem 2rem;
+    opacity: 0.3;
+  }
+  .empty p {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem; letter-spacing: 0.1em;
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 2rem 3rem;
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 4rem;
+  }
+  .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 0.15em; }
+  .footer-logo span { color: var(--gold); }
+  .footer-copy { font-size: 0.7rem; opacity: 0.25; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo"><span>X</span>GYM</a>
+  <div class="nav-right">
+    <a href="index.html" class="nav-back">← Back to Site</a>
+    <a href="#" class="nav-cta">Book Assessment</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <p class="hero-label">XGYM Content</p>
+  <h1>Training <span>Library</span></h1>
+  <p class="hero-sub">Videos on training, nutrition, recovery, body composition and the culture behind XGYM.</p>
+</div>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <div class="filter-inner">
+    <button class="filter-btn active" data-filter="all">All Videos</button>
+    <button class="filter-btn" data-filter="our-gym">Our Gym</button>
+    <button class="filter-btn" data-filter="weight-training">Weight Training</button>
+    <button class="filter-btn" data-filter="nutrition">Nutrition</button>
+    <button class="filter-btn" data-filter="recovery">Recovery</button>
+    <button class="filter-btn" data-filter="dexa">DEXA / Body Composition</button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <div id="video-container"></div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-category" id="modal-category"></div>
+        <div class="modal-title" id="modal-title"></div>
+      </div>
+      <button class="modal-close" id="modal-close">✕</button>
+    </div>
+    <div class="modal-video">
+      <iframe id="modal-iframe" src="" allowfullscreen allow="autoplay"></iframe>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo"><span>X</span>GYM</div>
+  <p class="footer-copy">© 2026 XGYM Castle Hill. All rights reserved.</p>
+</footer>
+
+<script>
+// ============================================================
+// VIDEO DATA — Replace YouTube IDs with your real video IDs
+// To get a video ID: youtube.com/watch?v=XXXXXXXX — copy the XXXXXXXX part
+// ============================================================
+const videos = [
+  // OUR GYM
+  {
+    id: 'v2',
+    youtubeId: 'HCwq-iIo61k',
+    isShort: true,
+    title: 'Meet Jonathan — Faces of XGYM',
+    desc: 'Getting to know the people behind XGYM. Jonathan shares his story and what keeps him coming back.',
+    category: 'our-gym',
+    categoryLabel: 'Our Gym'
+  },
+  {
+    id: 'v3',
+    youtubeId: 'R6XTyHEniec',
+    isShort: false,
+    title: "Rangi's 300kg 'Light' Squat — Vlog",
+    desc: 'A behind-the-scenes look at what serious training looks like at XGYM Castle Hill.',
+    category: 'our-gym',
+    categoryLabel: 'Our Gym'
+  },
+  {
+    id: 'v6',
+    youtubeId: 'rbSuay92QhE',
+    isShort: true,
+    title: 'XGYM Lifters Conquest — Comp Recap',
+    desc: 'Our lifters take on the competition floor. A full recap of the XGYM team at Conquest.',
+    category: 'our-gym',
+    categoryLabel: 'Our Gym'
+  },
+
+  // WEIGHT TRAINING
+  {
+    id: 'v1',
+    youtubeId: 'IGVr0CIdL14',
+    isShort: true,
+    title: 'Master the Deadlift',
+    desc: 'Step-by-step technique breakdown for one of the most important lifts in strength training.',
+    category: 'weight-training',
+    categoryLabel: 'Weight Training'
+  },
+  {
+    id: 'v4',
+    youtubeId: 'oykRkrZPSGU',
+    isShort: true,
+    title: 'Underhand Grip Chin-Up',
+    desc: 'How to perform the underhand chin-up correctly and why it belongs in your programme.',
+    category: 'weight-training',
+    categoryLabel: 'Weight Training'
+  },
+  {
+    id: 'v5',
+    youtubeId: 'ByI_Dcz5Mbw',
+    isShort: true,
+    title: 'Dumbbell RDL Technique',
+    desc: 'Fix your Romanian deadlift form with this dumbbell variation — great for hamstring development.',
+    category: 'weight-training',
+    categoryLabel: 'Weight Training'
+  },
+
+  // NUTRITION
+  {
+    id: 'v9',
+    youtubeId: '06uGR3KMtVw',
+    isShort: true,
+    title: 'Energy Intake & the Menstrual Cycle',
+    desc: 'How your energy needs change throughout your cycle and what to do about it.',
+    category: 'nutrition',
+    categoryLabel: 'Nutrition'
+  },
+
+  // RECOVERY
+  {
+    id: 'v10',
+    youtubeId: 'vuYIY6svBi8',
+    isShort: true,
+    title: 'Incorporate Rehab Into Your Training',
+    desc: 'How to work rehab exercises into your regular sessions without losing progress.',
+    category: 'recovery',
+    categoryLabel: 'Recovery'
+  },
+
+  // DEXA
+  {
+    id: 'v7',
+    youtubeId: 'olqXsR0wvcM',
+    isShort: true,
+    title: '12 Week XGYM DEXA Challenge',
+    desc: 'What can 12 weeks of data-driven training actually change? See the results from our DEXA challenge.',
+    category: 'dexa',
+    categoryLabel: 'DEXA / Body Composition'
+  },
+  {
+    id: 'v8',
+    youtubeId: 'N3Rr5pKZZxg',
+    isShort: true,
+    title: 'DEXA Scan at Castle Hill',
+    desc: 'See exactly what a DEXA scan looks like at XGYM and what you can expect from your results.',
+    category: 'dexa',
+    categoryLabel: 'DEXA / Body Composition'
+  },
+];
+
+// ============================================================
+// CATEGORY CONFIG
+// ============================================================
+const categories = [
+  { key: 'our-gym', label: 'Our Gym' },
+  { key: 'weight-training', label: 'Weight Training' },
+  { key: 'nutrition', label: 'Nutrition' },
+  { key: 'recovery', label: 'Recovery' },
+  { key: 'dexa', label: 'DEXA / Body Composition' },
+];
+
+// ============================================================
+// RENDER
+// ============================================================
+let activeFilter = 'all';
+
+function renderVideos() {
+  const container = document.getElementById('video-container');
+  container.innerHTML = '';
+
+  if (activeFilter === 'all') {
+    categories.forEach(cat => {
+      const catVideos = videos.filter(v => v.category === cat.key);
+      if (catVideos.length === 0) return;
+      container.innerHTML += renderSection(cat.label, catVideos);
+    });
+  } else {
+    const filtered = videos.filter(v => v.category === activeFilter);
+    const cat = categories.find(c => c.key === activeFilter);
+    if (filtered.length === 0) {
+      container.innerHTML = '<div class="empty"><p>No videos yet — check back soon.</p></div>';
+    } else {
+      container.innerHTML = renderSection(cat.label, filtered);
+    }
+  }
+
+  // Attach card click events
+  document.querySelectorAll('.video-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const id = card.dataset.id;
+      const video = videos.find(v => v.id === id);
+      const url = video.isShort
+        ? `https://www.youtube.com/shorts/${video.youtubeId}`
+        : `https://www.youtube.com/watch?v=${video.youtubeId}`;
+      window.open(url, '_blank');
+    });
+  });
+}
+
+function renderSection(label, vids) {
+  return `
+    <div class="section">
+      <div class="section-header">
+        <div class="section-title">${label}</div>
+        <div class="section-count">${vids.length} video${vids.length !== 1 ? 's' : ''}</div>
+      </div>
+      <div class="video-grid">
+        ${vids.map(v => renderCard(v)).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function renderCard(v) {
+  const thumb = `https://i.ytimg.com/vi/${v.youtubeId}/hqdefault.jpg`;
+  return `
+    <div class="video-card" data-id="${v.id}">
+      <div class="video-thumb">
+        <img src="${thumb}"
+          style="width:100%;height:100%;object-fit:cover;display:block;"
+          alt="${v.title}"
+          onerror="this.style.background='#1a1a1a';this.style.display='none'">
+        <div class="play-overlay">
+          <div class="play-btn">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+        </div>
+      </div>
+      <div class="video-info">
+        <div class="video-category">${v.categoryLabel}</div>
+        <div class="video-title">${v.title}</div>
+        <div class="video-desc">${v.desc}</div>
+      </div>
+    </div>
+  `;
+}
+
+// ============================================================
+// MODAL
+// ============================================================
+function openModal(video) {
+  document.getElementById('modal-title').textContent = video.title;
+  document.getElementById('modal-category').textContent = video.categoryLabel;
+  // Both Shorts and regular videos use the same embed format
+  document.getElementById('modal-iframe').src = `https://www.youtube.com/embed/${video.youtubeId}?autoplay=1`;
+  document.getElementById('modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('open');
+  document.getElementById('modal-iframe').src = '';
+  document.body.style.overflow = '';
+}
+
+document.getElementById('modal-close').addEventListener('click', closeModal);
+document.getElementById('modal').addEventListener('click', e => {
+  if (e.target === document.getElementById('modal')) closeModal();
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+// ============================================================
+// FILTER
+// ============================================================
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeFilter = btn.dataset.filter;
+    renderVideos();
+  });
+});
+
+// Init
+renderVideos();
+</script>
+</body>
+</html>
