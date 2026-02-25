@@ -151,19 +151,107 @@ footer { border-top: 1px solid var(--border); padding: 2.5rem 3rem; display: fle
   .plans-grid { grid-template-columns: 1fr; }
   .included-grid { grid-template-columns: 1fr; }
 }
+
+  /* ===== GLOBAL NAV ===== */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 3rem;
+    background: rgba(10,10,10,0.97);
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    backdrop-filter: blur(10px);
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem; letter-spacing: 0.15em;
+    color: var(--white); text-decoration: none;
+    flex-shrink: 0;
+  }
+  .nav-logo span { color: var(--gold); }
+  .nav-links {
+    display: flex; align-items: center; gap: 2rem;
+    list-style: none;
+  }
+  .nav-link {
+    font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--white); opacity: 0.45; text-decoration: none;
+    transition: opacity 0.2s, color 0.2s;
+    white-space: nowrap;
+  }
+  .nav-link:hover { opacity: 1; color: var(--gold); }
+  .nav-link.nav-active { opacity: 1; color: var(--gold); }
+  .nav-cta {
+    background: var(--gold); color: var(--black);
+    padding: 0.6rem 1.5rem;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.8rem; letter-spacing: 0.2em; text-transform: uppercase;
+    font-weight: 700; text-decoration: none;
+    transition: background 0.2s;
+    opacity: 1 !important;
+    white-space: nowrap;
+  }
+  .nav-cta:hover { background: var(--gold-light); }
+  /* Hamburger (mobile) */
+  .nav-hamburger {
+    display: none; flex-direction: column; gap: 5px;
+    background: none; border: none; cursor: pointer; padding: 4px;
+  }
+  .nav-hamburger span {
+    display: block; width: 22px; height: 2px;
+    background: var(--white); transition: transform 0.25s, opacity 0.25s;
+  }
+  .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+  .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  @media (max-width: 860px) {
+    nav { padding: 1rem 1.5rem; position: relative; }
+    .nav-hamburger { display: flex; }
+    .nav-links {
+      display: none; flex-direction: column; align-items: flex-start; gap: 0;
+      position: absolute; top: 100%; left: 0; right: 0;
+      background: rgba(10,10,10,0.99);
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      padding: 0.5rem 0 1rem;
+    }
+    .nav-links.open { display: flex; }
+    .nav-links li { width: 100%; }
+    .nav-link { display: block; padding: 0.75rem 1.5rem; width: 100%; }
+    .nav-cta { margin: 0.5rem 1.5rem; display: inline-block; width: auto; }
+  }
+  /* ===== END GLOBAL NAV ===== */
+
 </style>
 </head>
 <body>
 
+<!-- NAV -->
 <nav>
   <a href="index.html" class="nav-logo"><span>X</span>GYM</a>
-  <div class="nav-links">
-    <a href="index.html" class="nav-link">← Back</a>
-    <a href="testing.html" class="nav-link">Testing</a>
-    <a href="library.html" class="nav-link">Library</a>
-    <a href="https://digitalpresence.biz/xgym/memberships/" target="_blank" class="nav-cta">Enquire Now</a>
-  </div>
+  <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="index.html" class="nav-link">Home</a></li>
+    <li><a href="testing.html" class="nav-link">Testing</a></li>
+    <li><a href="library.html" class="nav-link">Training Library</a></li>
+    <li><a href="team.html" class="nav-link">Team</a></li>
+    <li><a href="coaching.html" class="nav-link">Coaching</a></li>
+    <li><a href="memberships.html" class="nav-link nav-active">Memberships</a></li>
+    <li><a href="https://digitalpresence.biz/xgym/dexa-scan/#form" target="_blank" class="nav-cta">Book Now</a></li>
+  </ul>
 </nav>
+<script>
+(function(){
+  var btn = document.getElementById('nav-hamburger');
+  var links = document.getElementById('nav-links');
+  if(btn && links) {
+    btn.addEventListener('click', function(){
+      btn.classList.toggle('open');
+      links.classList.toggle('open');
+    });
+  }
+})();
+</script>
 
 <!-- HERO -->
 <div class="hero">
@@ -177,13 +265,13 @@ footer { border-top: 1px solid var(--border); padding: 2.5rem 3rem; display: fle
 <!-- INTRO -->
 <div class="intro" style="margin: 0 auto; padding: 4rem 3rem 0; max-width:1200px; display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:center;">
   <div class="intro-text">
-    <p>XGYM is a 24/7 strength-focused training community in Castle Hill. Every membership comes with a free Results Plan — including an initial session with a personal trainer, nutrition guidance, and a programme tailored to your goals.</p>
+    <p>XGYM is a 24/7 strength-focused training community in Castle Hill. Every membership includes a Results Plan — starting with your personalised program foundation with a personal trainer, personalised nutrition planning tailored to your ongoing program, and a programme built around your goals throughout your membership.</p>
     <p style="margin-top:1rem;">No joining fee. Just pick up your access tag for $49.99 — and if you ever upgrade from a trial to a full membership, that fee is credited back.</p>
   </div>
   <div class="intro-stats">
     <div class="stat"><div class="stat-num">24/7</div><div class="stat-label">Gym Access</div></div>
     <div class="stat"><div class="stat-num">$0</div><div class="stat-label">Joining Fee</div></div>
-    <div class="stat"><div class="stat-num">Free</div><div class="stat-label">Results Plan</div></div>
+    <div class="stat"><div class="stat-num">Included</div><div class="stat-label">Results Plan</div></div>
     <div class="stat"><div class="stat-num">4</div><div class="stat-label">Membership Options</div></div>
   </div>
 </div>
@@ -216,9 +304,10 @@ footer { border-top: 1px solid var(--border); padding: 2.5rem 3rem; display: fle
       <div class="plan-charge">Charged fortnightly · No fixed term</div>
       <ul class="plan-includes">
         <li>24/7 gym access</li>
-        <li>Free Results Plan</li>
+        <li>Complimentary Results Plan</li>
+        <li>DEXA body composition scan — your baseline for tracking and tailoring results throughout your membership</li>
         <li>Complimentary PT session</li>
-        <li>Nutrition & programming session</li>
+        <li>Personalised nutrition planning, tailored to your ongoing program</li>
         <li>Maximum flexibility</li>
       </ul>
       <a href="https://digitalpresence.biz/xgym/memberships/" target="_blank" class="plan-cta">Enquire Now</a>
@@ -231,9 +320,10 @@ footer { border-top: 1px solid var(--border); padding: 2.5rem 3rem; display: fle
       <div class="plan-charge">Charged fortnightly · 3 month term</div>
       <ul class="plan-includes">
         <li>24/7 gym access</li>
-        <li>Free Results Plan</li>
+        <li>Complimentary Results Plan</li>
+        <li>DEXA body composition scan — your baseline for tracking and tailoring results throughout your membership</li>
         <li>Complimentary PT session</li>
-        <li>Nutrition & programming session</li>
+        <li>Personalised nutrition planning, tailored to your ongoing program</li>
       </ul>
       <a href="https://digitalpresence.biz/xgym/memberships/" target="_blank" class="plan-cta">Enquire Now</a>
     </div>
@@ -246,9 +336,10 @@ footer { border-top: 1px solid var(--border); padding: 2.5rem 3rem; display: fle
       <div class="plan-charge">Charged fortnightly · 12 month term</div>
       <ul class="plan-includes">
         <li>24/7 gym access</li>
-        <li>Free Results Plan</li>
+        <li>Complimentary Results Plan</li>
+        <li>DEXA body composition scan — your baseline for tracking and tailoring results throughout your membership</li>
         <li>Complimentary PT session</li>
-        <li>Nutrition & programming session</li>
+        <li>Personalised nutrition planning, tailored to your ongoing program</li>
         <li>Best value annual commitment</li>
       </ul>
       <a href="https://digitalpresence.biz/xgym/memberships/" target="_blank" class="plan-cta">Enquire Now</a>
@@ -261,9 +352,10 @@ footer { border-top: 1px solid var(--border); padding: 2.5rem 3rem; display: fle
       <div class="plan-charge">Charged fortnightly · 18 month term</div>
       <ul class="plan-includes">
         <li>24/7 gym access</li>
-        <li>Free Results Plan</li>
+        <li>Complimentary Results Plan</li>
+        <li>DEXA body composition scan — your baseline for tracking and tailoring results throughout your membership</li>
         <li>Complimentary PT session</li>
-        <li>Nutrition & programming session</li>
+        <li>Personalised nutrition planning, tailored to your ongoing program</li>
         <li>Lowest weekly rate available</li>
       </ul>
       <a href="https://digitalpresence.biz/xgym/memberships/" target="_blank" class="plan-cta">Enquire Now</a>
@@ -283,18 +375,18 @@ footer { border-top: 1px solid var(--border); padding: 2.5rem 3rem; display: fle
     </div>
     <div class="included-item">
       <div class="included-icon">📋</div>
-      <div class="included-name">Free Results Plan</div>
-      <div class="included-desc">A personalised programme built around your goals from day one.</div>
+      <div class="included-name">Complimentary Results Plan</div>
+      <div class="included-desc">A personalised programme built around your goals from day one, and updated as your goals evolve throughout your membership.</div>
     </div>
     <div class="included-item">
       <div class="included-icon">🤝</div>
-      <div class="included-name">Initial PT Session</div>
-      <div class="included-desc">One-on-one with a coach to set you up with proper technique and direction.</div>
+      <div class="included-name">Your Personalised Program Foundation</div>
+      <div class="included-desc">A one-on-one session with your coach that tailors your ongoing results plan — setting technique, direction, and a programme built around you from the start.</div>
     </div>
     <div class="included-item">
       <div class="included-icon">🥗</div>
-      <div class="included-name">Nutrition Session</div>
-      <div class="included-desc">Practical guidance on eating to support your training and goals.</div>
+      <div class="included-name">Personalised Nutrition Planning</div>
+      <div class="included-desc">Ongoing nutritional guidance tailored to your program — personalised to support your training and evolve as your goals change throughout your membership.</div>
     </div>
     <div class="included-item">
       <div class="included-icon">👥</div>
@@ -304,7 +396,7 @@ footer { border-top: 1px solid var(--border); padding: 2.5rem 3rem; display: fle
     <div class="included-item">
       <div class="included-icon">📊</div>
       <div class="included-name">Access to Testing Services</div>
-      <div class="included-desc">DEXA, metabolic testing, and blood markers available on-site.</div>
+      <div class="included-desc">DEXA body composition scan included on sign-up — your baseline for tracking and tailoring results. Metabolic testing and blood markers also available on-site throughout your membership.</div>
     </div>
   </div>
 </div>

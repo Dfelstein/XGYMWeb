@@ -27,29 +27,35 @@
     min-height: 100vh;
   }
 
-  /* NAV */
+  
+  /* ===== GLOBAL NAV ===== */
   nav {
     position: sticky; top: 0; z-index: 100;
     display: flex; align-items: center; justify-content: space-between;
     padding: 1.2rem 3rem;
     background: rgba(10,10,10,0.97);
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid rgba(255,255,255,0.07);
     backdrop-filter: blur(10px);
   }
   .nav-logo {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 1.8rem; letter-spacing: 0.15em;
     color: var(--white); text-decoration: none;
+    flex-shrink: 0;
   }
   .nav-logo span { color: var(--gold); }
-  .nav-right { display: flex; align-items: center; gap: 2rem; }
-  .nav-back {
+  .nav-links {
+    display: flex; align-items: center; gap: 2rem;
+    list-style: none;
+  }
+  .nav-link {
     font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
     color: var(--white); opacity: 0.45; text-decoration: none;
     transition: opacity 0.2s, color 0.2s;
-    display: flex; align-items: center; gap: 0.5rem;
+    white-space: nowrap;
   }
-  .nav-back:hover { opacity: 1; color: var(--gold); }
+  .nav-link:hover { opacity: 1; color: var(--gold); }
+  .nav-link.nav-active { opacity: 1; color: var(--gold); }
   .nav-cta {
     background: var(--gold); color: var(--black);
     padding: 0.6rem 1.5rem;
@@ -57,8 +63,41 @@
     font-size: 0.8rem; letter-spacing: 0.2em; text-transform: uppercase;
     font-weight: 700; text-decoration: none;
     transition: background 0.2s;
+    opacity: 1 !important;
+    white-space: nowrap;
   }
   .nav-cta:hover { background: var(--gold-light); }
+  /* Hamburger (mobile) */
+  .nav-hamburger {
+    display: none; flex-direction: column; gap: 5px;
+    background: none; border: none; cursor: pointer; padding: 4px;
+  }
+  .nav-hamburger span {
+    display: block; width: 22px; height: 2px;
+    background: var(--white); transition: transform 0.25s, opacity 0.25s;
+  }
+  .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+  .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  @media (max-width: 860px) {
+    nav { padding: 1rem 1.5rem; position: relative; }
+    .nav-hamburger { display: flex; }
+    .nav-links {
+      display: none; flex-direction: column; align-items: flex-start; gap: 0;
+      position: absolute; top: 100%; left: 0; right: 0;
+      background: rgba(10,10,10,0.99);
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      padding: 0.5rem 0 1rem;
+    }
+    .nav-links.open { display: flex; }
+    .nav-links li { width: 100%; }
+    .nav-link { display: block; padding: 0.75rem 1.5rem; width: 100%; }
+    .nav-cta { margin: 0.5rem 1.5rem; display: inline-block; width: auto; }
+  }
+  /* ===== END GLOBAL NAV ===== */
+
+
+  
 
   /* HERO */
   .hero {
@@ -262,11 +301,31 @@
 <!-- NAV -->
 <nav>
   <a href="index.html" class="nav-logo"><span>X</span>GYM</a>
-  <div class="nav-right">
-    <a href="index.html" class="nav-back">← Back to Site</a>
-    <a href="#" class="nav-cta">Book Assessment</a>
-  </div>
+  <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="index.html" class="nav-link">Home</a></li>
+    <li><a href="testing.html" class="nav-link">Testing</a></li>
+    <li><a href="library.html" class="nav-link nav-active">Training Library</a></li>
+    <li><a href="team.html" class="nav-link">Team</a></li>
+    <li><a href="coaching.html" class="nav-link">Coaching</a></li>
+    <li><a href="memberships.html" class="nav-link">Memberships</a></li>
+    <li><a href="https://digitalpresence.biz/xgym/dexa-scan/#form" target="_blank" class="nav-cta">Book Now</a></li>
+  </ul>
 </nav>
+<script>
+(function(){
+  var btn = document.getElementById('nav-hamburger');
+  var links = document.getElementById('nav-links');
+  if(btn && links) {
+    btn.addEventListener('click', function(){
+      btn.classList.toggle('open');
+      links.classList.toggle('open');
+    });
+  }
+})();
+</script>
 
 <!-- HERO -->
 <div class="hero">
