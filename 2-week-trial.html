@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>XGYM — 2 Week Trial</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230a0a0a'/%3E%3Ctext y='.9em' font-size='80' x='10' fill='%23c9a84c' font-family='Arial Black,sans-serif' font-weight='900'%3EX%3C/text%3E%3C/svg%3E">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&family=Barlow+Condensed:wght@700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --black: #0a0a0a;
+      --white: #f5f2ec;
+      --gold: #c9a84c;
+      --gold-light: #e8c96a;
+      --mid: #141414;
+      --grey: #888;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    html, body {
+      font-family: 'Barlow', sans-serif;
+      background: var(--black);
+      color: var(--white);
+      line-height: 1.6;
+    }
+    
+    nav { position:sticky; top:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:1.2rem 3rem; background:rgba(10,10,10,0.97); border-bottom:1px solid rgba(255,255,255,0.07); backdrop-filter:blur(10px); }
+    .nav-logo { font-family:'Bebas Neue',sans-serif; font-size:1.8rem; letter-spacing:0.15em; color:var(--white); text-decoration:none; flex-shrink:0; }
+    .nav-logo span { color:var(--gold); }
+    .nav-links { display:flex; align-items:center; gap:2rem; list-style:none; }
+    .nav-link { font-size:0.7rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--white); opacity:0.45; text-decoration:none; transition:opacity 0.2s,color 0.2s; white-space:nowrap; }
+    .nav-link:hover { opacity:1; color:var(--gold); }
+    .nav-link.nav-active { opacity:1; color:var(--gold); }
+    .nav-cta { background:var(--gold); color:var(--black); padding:0.6rem 1.5rem; font-family:'Barlow Condensed',sans-serif; font-size:0.8rem; letter-spacing:0.2em; text-transform:uppercase; font-weight:700; text-decoration:none; transition:background 0.2s; opacity:1!important; white-space:nowrap; }
+    .nav-cta:hover { background:var(--gold-light); }
+    .nav-hamburger { display:none; flex-direction:column; gap:5px; background:none; border:none; cursor:pointer; padding:4px; }
+    .nav-hamburger span { display:block; width:22px; height:2px; background:var(--white); transition:transform 0.25s,opacity 0.25s; }
+    .nav-hamburger.open span:nth-child(1) { transform:translateY(7px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity:0; }
+    .nav-hamburger.open span:nth-child(3) { transform:translateY(-7px) rotate(-45deg); }
+    @media(max-width:860px) { nav{padding:1rem 1.5rem;position:relative;} .nav-hamburger{display:flex;} .nav-links{display:none;flex-direction:column;align-items:flex-start;gap:0;position:absolute;top:100%;left:0;right:0;background:rgba(10,10,10,0.99);border-bottom:1px solid rgba(255,255,255,0.07);padding:0.5rem 0 1rem;} .nav-links.open{display:flex;} .nav-links li{width:100%;} .nav-link{display:block;padding:0.75rem 1.5rem;width:100%;} .nav-cta{margin:0.5rem 1.5rem;display:inline-block;width:auto;} }
+    
+    .hero {
+      height: 45vh; min-height: 360px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      
+      padding: 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .hero-bg {
+      position: absolute; inset: 0;
+      background-image: url('images/p1-30.jpg');
+      background-size: cover; background-position: center;
+      filter: brightness(0.4) contrast(1.1);
+    }
+    .hero-content {
+      position: relative;
+      z-index: 20;
+      max-width: 900px;
+    }
+    
+    .hero h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 4.5rem;
+      letter-spacing: 0.08em;
+      margin-bottom: 1.5rem;
+      line-height: 1.1;
+    }
+    
+    .hero p {
+      font-size: 1.2rem;
+      color: #aaa;
+      margin-bottom: 0;
+      font-weight: 300;
+      letter-spacing: 0.02em;
+    }
+    
+    section {
+      padding: 8rem 3rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 900;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    
+    .section-label::before {
+      content: '';
+      display: block;
+      width: 30px;
+      height: 2px;
+      background: var(--gold);
+    }
+    
+    h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem;
+      letter-spacing: 0.08em;
+      margin-bottom: 3rem;
+      line-height: 1.1;
+    }
+    
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+    
+    .feature-card {
+      background: var(--mid);
+      padding: 2.5rem 2rem;
+      border: 1px solid rgba(201, 168, 76, 0.15);
+      border-radius: 4px;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    
+    .feature-card:hover {
+      border-color: rgba(201, 168, 76, 0.5);
+      background: rgba(20, 20, 20, 0.8);
+      transform: translateY(-4px);
+    }
+    
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--gold);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .feature-card:hover::before {
+      opacity: 1;
+    }
+    
+    .feature-card h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem;
+      letter-spacing: 0.08em;
+      margin-bottom: 1rem;
+      color: var(--gold);
+    }
+    
+    .feature-card p {
+      color: #aaa;
+      font-size: 0.95rem;
+      line-height: 1.7;
+      font-weight: 300;
+    }
+    
+    .steps-section {
+      background: var(--mid);
+      padding: 4rem;
+      border-radius: 4px;
+      border: 1px solid rgba(201, 168, 76, 0.1);
+    }
+    
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+    
+    .step {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .step-number {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3.5rem;
+      color: var(--gold);
+      line-height: 1;
+      margin-bottom: 1rem;
+      opacity: 0.3;
+    }
+    
+    .step h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.8rem;
+    }
+    
+    .step p {
+      color: #aaa;
+      font-size: 0.95rem;
+      line-height: 1.7;
+      font-weight: 300;
+    }
+    
+    .who-section {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+    
+    .who-section p {
+      font-size: 1.05rem;
+      color: #bbb;
+      line-height: 1.8;
+      font-weight: 300;
+      margin-bottom: 1.5rem;
+    }
+    
+    .cta-section {
+      background: linear-gradient(135deg, #111 0%, #1a1a1a 100%);
+      padding: 6rem 3rem;
+      text-align: center;
+      border-top: 1px solid rgba(201, 168, 76, 0.2);
+      border-bottom: 1px solid rgba(201, 168, 76, 0.2);
+      margin: 4rem 0;
+    }
+    
+    .cta-section h2 {
+      font-size: 2.8rem;
+      margin-bottom: 1rem;
+    }
+    
+    .cta-section p {
+      font-size: 1.1rem;
+      color: #999;
+      margin-bottom: 2rem;
+      font-weight: 300;
+    }
+    
+    .btn {
+      background: var(--gold);
+      color: var(--black);
+      padding: 0.9rem 2.5rem;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.9rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+      border-radius: 2px;
+    }
+    
+    .btn:hover {
+      background: var(--gold-light);
+      transform: translateY(-2px);
+    }
+    
+    .pricing-note {
+      margin-top: 3rem;
+      padding: 1.5rem 2rem;
+      background: rgba(201, 168, 76, 0.05);
+      border-left: 3px solid var(--gold);
+      border-radius: 2px;
+    }
+    
+    .pricing-note p {
+      color: #bbb;
+      font-size: 0.95rem;
+      margin: 0;
+      line-height: 1.6;
+    }
+    
+    footer {
+      background: #0a0a0a;
+      border-top: 1px solid #1e1e1e;
+      padding: 56px 20px 32px;
+      font-family: 'Barlow', sans-serif;
+    }
+    
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+      
+      .hero p {
+        font-size: 1rem;
+      }
+      
+      h2 {
+        font-size: 2rem;
+      }
+      
+      section {
+        padding: 4rem 1.5rem;
+      }
+      
+      .steps-section {
+        padding: 2rem;
+      }
+      
+      .cta-section {
+        padding: 3rem 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo"><span>X</span>GYM</a>
+  <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="index.html" class="nav-link">Home</a></li>
+    <li><a href="testing.html" class="nav-link">Testing</a></li>
+    <li><a href="library.html" class="nav-link">Training Library</a></li>
+    <li><a href="team.html" class="nav-link">Team</a></li>
+    <li><a href="coaching.html" class="nav-link">Coaching</a></li>
+    <li><a href="memberships.html" class="nav-link">Memberships</a></li>
+    <li><a href="contact.html" class="nav-link">Contact</a></li><li><a href="contact.html" class="nav-cta">Book Now</a></li>
+  </ul>
+</nav>
+
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(10,10,10,0.85));z-index:11;"></div>
+  <div class="hero-content" style="position:relative;z-index:20;">
+    <h1>TRY XGYM FOR 2 WEEKS</h1>
+    <p>Experience the XGYM difference with full access, no lock-in, no commitment</p>
+  </div>
+</div>
+
+<section>
+  <div class="section-label">What's Included</div>
+  <h2>Everything You Need to Get Started</h2>
+  <div class="features-grid">
+    <div class="feature-card">
+      <h3>Full Gym Access</h3>
+      <p>Complete access to our state-of-the-art strength training facility with premium equipment, including squat racks, platforms, barbells, dumbbells, and conditioning space.</p>
+    </div>
+    <div class="feature-card">
+      <h3>Testing Suite Access</h3>
+      <p>Experience XGYM's comprehensive testing capabilities including body composition analysis, metabolic testing, and performance metrics to understand your starting point.</p>
+    </div>
+    <div class="feature-card">
+      <h3>Coaching Session</h3>
+      <p>One introductory coaching session to assess your goals, movement quality, and training history. Your coach designs a personalized 2-week training plan.</p>
+    </div>
+    <div class="feature-card">
+      <h3>Training Library</h3>
+      <p>Full access to XGYM's video exercise library with hundreds of movement demonstrations, programming templates, and educational content for all fitness levels.</p>
+    </div>
+    <div class="feature-card">
+      <h3>Community Access</h3>
+      <p>Join our supportive community of serious lifters and athletes. Participate in group training sessions, seminars, and connect with like-minded individuals.</p>
+    </div>
+    <div class="feature-card">
+      <h3>Zero Commitment</h3>
+      <p>No lock-in contracts. No hidden fees. If XGYM isn't right for you, there's no obligation to continue. Pure, risk-free trial of the XGYM experience.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="section-label">How It Works</div>
+  <div class="steps-section">
+    <h2>Your 2-Week Journey</h2>
+    <div class="steps-grid">
+      <div class="step">
+        <div class="step-number">01</div>
+        <h3>Book Your Trial</h3>
+        <p>Click the button below to book your 2-week trial online. We'll confirm your dates and provide all the information you need before your first visit.</p>
+      </div>
+      <div class="step">
+        <div class="step-number">02</div>
+        <h3>Meet Your Coach</h3>
+        <p>Come in for your onboarding session. We'll assess your movement quality, discuss your goals, and design a personalized training plan for your 2 weeks.</p>
+      </div>
+      <div class="step">
+        <div class="step-number">03</div>
+        <h3>Train With Full Access</h3>
+        <p>Train for 2 weeks with unrestricted access to the facility, equipment, and coaching support. Our coaches are available for form checks and programming adjustments.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="section-label">Who Is It For</div>
+  <h2>Perfect for Everyone</h2>
+  <div class="who-section">
+    <p>The XGYM 2-week trial is designed for anyone curious about what a premium, coaching-focused strength facility can offer. Whether you're completely new to structured training, returning after time away, or an experienced athlete looking for a world-class training environment, this trial gives you the chance to experience the XGYM difference without any risk.</p>
+    <p>Beginners benefit from personalized coaching and a supportive community that prioritizes proper technique. Experienced lifters appreciate our advanced programming, state-of-the-art equipment, and access to performance testing. Athletes from all sports discover how strength training accelerates their performance on the field or court.</p>
+    <p>If you've been training alone or in a commercial gym, you'll notice the difference immediately. XGYM is built for people who take their training seriously and want to train in an environment that matches their intensity and commitment.</p>
+  </div>
+</section>
+
+<div class="cta-section">
+  <h2>Start Your Trial Today</h2>
+  <p>No lock-in. No commitment. Just results.</p>
+  <a href="https://xgym.com.au/2-week-trial/" class="btn">Book Now</a>
+  <div class="pricing-note">
+    <p>2-week trial pricing is available upon inquiry. Book your trial to learn about current rates and any special promotions we may be running.</p>
+  </div>
+</div>
+
+<footer style="background:#0a0a0a;border-top:1px solid #1e1e1e;padding:56px 20px 32px;font-family:'Barlow',sans-serif;">
+  <div style="max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr 1fr;gap:40px;margin-bottom:48px;">
+    <div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;color:#f5f2ec;letter-spacing:0.08em;margin-bottom:14px;"><span style="color:#c9a84c;">X</span>GYM</div>
+      <p style="color:#888;font-size:0.88rem;line-height:1.7;margin:0;">Castle Hill's dedicated strength and performance facility.</p>
+    </div>
+    <div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.78rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#c9a84c;margin-bottom:16px;">Quick Links</div>
+      <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;">
+        <li><a href="index.html" style="color:#aaa;text-decoration:none;font-size:0.88rem;">Home</a></li>
+        <li><a href="testing.html" style="color:#aaa;text-decoration:none;font-size:0.88rem;">Testing</a></li>
+        <li><a href="library.html" style="color:#aaa;text-decoration:none;font-size:0.88rem;">Training Library</a></li>
+        <li><a href="team.html" style="color:#aaa;text-decoration:none;font-size:0.88rem;">Team</a></li>
+        <li><a href="coaching.html" style="color:#aaa;text-decoration:none;font-size:0.88rem;">Coaching</a></li>
+        <li><a href="memberships.html" style="color:#aaa;text-decoration:none;font-size:0.88rem;">Memberships</a></li>
+      </ul>
+    </div>
+    <div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.78rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#c9a84c;margin-bottom:16px;">Contact</div>
+      <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;">
+        <li><a href="tel:0424023601" style="color:#aaa;text-decoration:none;font-size:0.88rem;">📞 0424 023 601</a></li>
+        <li><a href="mailto:admin@xgym.com.au" style="color:#aaa;text-decoration:none;font-size:0.88rem;">✉ admin@xgym.com.au</a></li>
+        <li><span style="color:#aaa;font-size:0.88rem;">📍 Castle Hill, NSW</span></li>
+      </ul>
+    </div>
+  </div>
+  <div style="max-width:1100px;margin:0 auto;border-top:1px solid #1e1e1e;padding-top:24px;text-align:center;">
+    <p style="color:#555;font-size:0.8rem;margin:0;letter-spacing:0.04em;">XGYM © 2026. All Rights Reserved.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var btn=document.getElementById('nav-hamburger');
+  var links=document.getElementById('nav-links');
+  if(btn&&links){btn.addEventListener('click',function(){btn.classList.toggle('open');links.classList.toggle('open');});}
+})();
+</script>
+
+</body>
+</html>

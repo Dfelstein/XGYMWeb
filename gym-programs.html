@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>XGYM — Gym Programs</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&family=Barlow+Condensed:wght@700;900&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230a0a0a'/%3E%3Ctext y='.9em' font-size='80' x='10' fill='%23c9a84c' font-family='Arial Black,sans-serif' font-weight='900'%3EX%3C/text%3E%3C/svg%3E">
+  <style>
+    :root {
+      --black: #0a0a0a;
+      --white: #f5f2ec;
+      --gold: #c9a84c;
+      --gold-light: #e8c96a;
+      --mid: #141414;
+      --grey: #888;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Barlow', sans-serif;
+      background: var(--black);
+      color: var(--white);
+      line-height: 1.6;
+    }
+
+    nav { position:sticky; top:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:1.2rem 3rem; background:rgba(10,10,10,0.97); border-bottom:1px solid rgba(255,255,255,0.07); backdrop-filter:blur(10px); }
+    .nav-logo { font-family:'Bebas Neue',sans-serif; font-size:1.8rem; letter-spacing:0.15em; color:var(--white); text-decoration:none; flex-shrink:0; }
+    .nav-logo span { color:var(--gold); }
+    .nav-links { display:flex; align-items:center; gap:2rem; list-style:none; }
+    .nav-link { font-size:0.7rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--white); opacity:0.45; text-decoration:none; transition:opacity 0.2s,color 0.2s; white-space:nowrap; }
+    .nav-link:hover { opacity:1; color:var(--gold); }
+    .nav-link.nav-active { opacity:1; color:var(--gold); }
+    .nav-cta { background:var(--gold); color:var(--black); padding:0.6rem 1.5rem; font-family:'Barlow Condensed',sans-serif; font-size:0.8rem; letter-spacing:0.2em; text-transform:uppercase; font-weight:700; text-decoration:none; transition:background 0.2s; opacity:1!important; white-space:nowrap; }
+    .nav-cta:hover { background:var(--gold-light); }
+    .nav-hamburger { display:none; flex-direction:column; gap:5px; background:none; border:none; cursor:pointer; padding:4px; }
+    .nav-hamburger span { display:block; width:22px; height:2px; background:var(--white); transition:transform 0.25s,opacity 0.25s; }
+    .nav-hamburger.open span:nth-child(1) { transform:translateY(7px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity:0; }
+    .nav-hamburger.open span:nth-child(3) { transform:translateY(-7px) rotate(-45deg); }
+    @media(max-width:860px) { nav{padding:1rem 1.5rem;position:relative;} .nav-hamburger{display:flex;} .nav-links{display:none;flex-direction:column;align-items:flex-start;gap:0;position:absolute;top:100%;left:0;right:0;background:rgba(10,10,10,0.99);border-bottom:1px solid rgba(255,255,255,0.07);padding:0.5rem 0 1rem;} .nav-links.open{display:flex;} .nav-links li{width:100%;} .nav-link{display:block;padding:0.75rem 1.5rem;width:100%;} .nav-cta{margin:0.5rem 1.5rem;display:inline-block;width:auto;} }
+
+    .hero {
+      
+      height: 45vh; min-height: 360px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute; inset: 0;
+      background-image: url('images/p1-50.jpg');
+      background-size: cover; background-position: center;
+      filter: brightness(0.4) contrast(1.1);
+    }
+    .hero-content {
+      position: relative;
+      z-index: 20;
+      max-width: 900px;
+    }
+
+    .hero h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 5rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+      color: var(--white);
+      line-height: 1.1;
+    }
+
+    .hero p {
+      font-size: 1.1rem;
+      color: rgba(245, 242, 236, 0.75);
+      font-weight: 300;
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.8;
+    }
+
+    section {
+      padding: 8rem 3rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 700;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .section-label::before {
+      content: '';
+      width: 30px;
+      height: 2px;
+      background: var(--gold);
+    }
+
+    .intro-text {
+      font-size: 1.15rem;
+      color: rgba(245, 242, 236, 0.8);
+      max-width: 900px;
+      margin: 2rem 0 1.5rem;
+      line-height: 1.9;
+      font-weight: 300;
+    }
+
+    .philosophy-text {
+      background: rgba(20, 20, 20, 0.4);
+      border-left: 3px solid var(--gold);
+      padding: 2rem;
+      margin: 3rem 0 4rem;
+      border-radius: 4px;
+      font-size: 1.05rem;
+      color: rgba(245, 242, 236, 0.8);
+      line-height: 1.9;
+      font-weight: 300;
+    }
+
+    .programs-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2.5rem;
+      margin: 4rem 0;
+    }
+
+    .program-card {
+      background: rgba(20, 20, 20, 0.6);
+      border: 1px solid rgba(201, 168, 76, 0.15);
+      padding: 2.5rem;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.3s ease;
+    }
+
+    .program-card:hover {
+      border-color: rgba(201, 168, 76, 0.4);
+      background: rgba(20, 20, 20, 0.8);
+      transform: translateY(-5px);
+    }
+
+    .program-card h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem;
+      letter-spacing: 0.08em;
+      color: var(--white);
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      line-height: 1.2;
+      min-height: 55px;
+    }
+
+    .program-specs {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .spec {
+      font-size: 0.9rem;
+      color: rgba(245, 242, 236, 0.7);
+    }
+
+    .spec strong {
+      color: var(--gold);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+    }
+
+    .program-card p {
+      font-size: 0.95rem;
+      color: rgba(245, 242, 236, 0.7);
+      line-height: 1.7;
+      margin: 1.5rem 0;
+      flex-grow: 1;
+    }
+
+    .program-badge {
+      display: inline-block;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.6rem 1rem;
+      background: rgba(201, 168, 76, 0.15);
+      color: var(--gold);
+      border-radius: 3px;
+      margin-bottom: 1.5rem;
+      font-weight: 700;
+      width: fit-content;
+    }
+
+    .access-section {
+      background: rgba(20, 20, 20, 0.4);
+      border: 1px solid rgba(201, 168, 76, 0.15);
+      padding: 3rem;
+      margin: 4rem 0;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    .access-section h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      color: var(--white);
+    }
+
+    .access-section p {
+      font-size: 1.05rem;
+      color: rgba(245, 242, 236, 0.8);
+      max-width: 800px;
+      margin: 0 auto 2rem;
+      line-height: 1.8;
+    }
+
+    .access-btn {
+      background: var(--gold);
+      color: var(--black);
+      padding: 1rem 2.5rem;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-weight: 700;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.3s;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .access-btn:hover {
+      background: var(--gold-light);
+    }
+
+    footer {
+      background: #0a0a0a;
+      border-top: 1px solid #1e1e1e;
+      padding: 56px 20px 32px;
+      font-family: 'Barlow', sans-serif;
+    }
+
+    .footer-content {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 48px;
+    }
+
+    .footer-section h4 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 16px;
+    }
+
+    .footer-section p {
+      color: #888;
+      font-size: 0.88rem;
+      line-height: 1.7;
+      margin: 0;
+    }
+
+    .footer-section ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-section a {
+      color: #aaa;
+      text-decoration: none;
+      font-size: 0.88rem;
+    }
+
+    .footer-section a:hover {
+      color: var(--gold);
+    }
+
+    .footer-bottom {
+      max-width: 1100px;
+      margin: 0 auto;
+      border-top: 1px solid #1e1e1e;
+      padding-top: 24px;
+      text-align: center;
+    }
+
+    .footer-bottom p {
+      color: #555;
+      font-size: 0.8rem;
+      margin: 0;
+      letter-spacing: 0.04em;
+    }
+
+    @media (max-width: 1024px) {
+      .programs-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .hero h1 {
+        font-size: 3.5rem;
+      }
+
+      section {
+        padding: 6rem 2rem;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .programs-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+
+      .hero p {
+        font-size: 1rem;
+      }
+
+      .footer-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      section {
+        padding: 4rem 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo"><span>X</span>GYM</a>
+  <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="index.html" class="nav-link">Home</a></li>
+    <li><a href="testing.html" class="nav-link">Testing</a></li>
+    <li><a href="library.html" class="nav-link">Training Library</a></li>
+    <li><a href="team.html" class="nav-link">Team</a></li>
+    <li><a href="coaching.html" class="nav-link">Coaching</a></li>
+    <li><a href="memberships.html" class="nav-link">Memberships</a></li>
+    <li><a href="contact.html" class="nav-link">Contact</a></li><li><a href="contact.html" class="nav-cta">Book Now</a></li>
+  </ul>
+</nav>
+
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(10,10,10,0.85));z-index:11;"></div>
+  <div class="hero-content" style="position:relative;z-index:20;">
+    <h1>Programs That Produce Results</h1>
+    <p>Structured training programs designed by our coaches using periodisation and progressive overload—available exclusively to XGYM members.</p>
+  </div>
+</div>
+
+<section>
+  <div class="section-label">Member Programs</div>
+  
+  <p class="intro-text">Unlike commercial gyms that leave you to figure it out, XGYM members have access to coach-designed programs built on periodisation and progressive overload. Each program is structured for measurable progress and real results.</p>
+
+  <div class="philosophy-text">
+    Every program at XGYM is evidence-based and periodised to manage fatigue, prevent plateaus, and build sustainable progress. We don't believe in one-size-fits-all training. Our programs scale across experience levels and adapt to your individual needs.
+  </div>
+
+  <div class="programs-grid">
+    <div class="program-card">
+      <h3>XGYM Strength Foundation</h3>
+      <div class="program-specs">
+        <div class="spec"><strong>Duration:</strong> 12 weeks</div>
+        <div class="spec"><strong>Level:</strong> Beginner-Intermediate</div>
+        <div class="spec"><strong>Frequency:</strong> 3 days/week</div>
+      </div>
+      <p>Perfect for those new to structured training. Master fundamental movement patterns, establish consistent technique, and build a solid strength base. Includes detailed form cues and progression protocols.</p>
+      <span class="program-badge">Access via Membership</span>
+    </div>
+
+    <div class="program-card">
+      <h3>Hypertrophy Block Program</h3>
+      <div class="program-specs">
+        <div class="spec"><strong>Duration:</strong> 8 weeks</div>
+        <div class="spec"><strong>Level:</strong> Intermediate</div>
+        <div class="spec"><strong>Frequency:</strong> 4 days/week</div>
+      </div>
+      <p>Dedicated muscle-building block emphasising higher rep ranges, volume accumulation, and strategic exercise selection. Optimised for lean mass gain with targeted hypertrophy protocols and nutrition guidance.</p>
+      <span class="program-badge">Access via Membership</span>
+    </div>
+
+    <div class="program-card">
+      <h3>Powerlifting Peaking Program</h3>
+      <div class="program-specs">
+        <div class="spec"><strong>Duration:</strong> 10 weeks</div>
+        <div class="spec"><strong>Level:</strong> Intermediate-Advanced</div>
+        <div class="spec"><strong>Frequency:</strong> 4 days/week</div>
+      </div>
+      <p>Build maximum strength with periodised intensity progression. This program follows a classic meet-prep structure with accumulation, intensification, and realisation phases. Includes platform-ready technique work.</p>
+      <span class="program-badge">Access via Membership</span>
+    </div>
+
+    <div class="program-card">
+      <h3>Body Recomposition Program</h3>
+      <div class="program-specs">
+        <div class="spec"><strong>Duration:</strong> 16 weeks</div>
+        <div class="spec"><strong>Level:</strong> All levels</div>
+        <div class="spec"><strong>Frequency:</strong> 3-4 days/week</div>
+      </div>
+      <p>Strategic fat loss while preserving or building muscle mass. Balanced approach combining strength work, metabolic conditioning, and caloric management. Track progress with DEXA scans at key intervals.</p>
+      <span class="program-badge">Access via Membership</span>
+    </div>
+
+    <div class="program-card">
+      <h3>Athletic Performance Program</h3>
+      <div class="program-specs">
+        <div class="spec"><strong>Duration:</strong> 12 weeks</div>
+        <div class="spec"><strong>Level:</strong> Athletes</div>
+        <div class="spec"><strong>Frequency:</strong> 4-5 days/week</div>
+      </div>
+      <p>Enhance power, speed, and athletic capacity. Combines strength training with explosive movement development and sport-specific conditioning. Designed for competitive athletes across various sports.</p>
+      <span class="program-badge">Access via Membership</span>
+    </div>
+
+    <div class="program-card">
+      <h3>Competition Prep Program</h3>
+      <div class="program-specs">
+        <div class="spec"><strong>Duration:</strong> 20 weeks</div>
+        <div class="spec"><strong>Level:</strong> Advanced</div>
+        <div class="spec"><strong>Frequency:</strong> 5 days/week</div>
+      </div>
+      <p>Comprehensive 20-week bodybuilding competition prep. Includes periodised training blocks, nutrition periodisation, conditioning protocols, and peak week management for optimal stage presentation.</p>
+      <span class="program-badge">Access via Membership</span>
+    </div>
+  </div>
+
+  <div class="access-section">
+    <h3>Ready To Start?</h3>
+    <p>All programs are available to active XGYM members through our training library. Get detailed video guides, progressive spreadsheets, and direct access to coaching support. Not a member yet? Start with a 2-week trial and experience the difference structured training makes.</p>
+    <a href="memberships.html" class="access-btn">Become A Member</a>
+  </div>
+</section>
+
+
+<section style="padding: 0; max-width: 100%;">
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0.25rem;">
+    <img src="images/p1-01.jpg" alt="XGYM training" style="width:100%;height:220px;object-fit:cover;display:block;">
+    <img src="images/p1-07.jpg" alt="XGYM strength" style="width:100%;height:220px;object-fit:cover;display:block;">
+    <img src="images/p1-15.jpg" alt="XGYM lifting" style="width:100%;height:220px;object-fit:cover;display:block;">
+    <img src="images/p1-22.jpg" alt="XGYM performance" style="width:100%;height:220px;object-fit:cover;display:block;">
+  </div>
+</section>
+
+<footer>
+  <div class="footer-content">
+    <div class="footer-section">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;color:#f5f2ec;letter-spacing:0.08em;margin-bottom:14px;"><span style="color:#c9a84c;">X</span>GYM</div>
+      <p>Castle Hill's dedicated strength and performance facility.</p>
+    </div>
+    <div class="footer-section">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="testing.html">Testing</a></li>
+        <li><a href="library.html">Training Library</a></li>
+        <li><a href="team.html">Team</a></li>
+        <li><a href="coaching.html">Coaching</a></li>
+        <li><a href="memberships.html">Memberships</a></li>
+      </ul>
+    </div>
+    <div class="footer-section">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="tel:0424023601">📞 0424 023 601</a></li>
+        <li><a href="mailto:admin@xgym.com.au">✉ admin@xgym.com.au</a></li>
+        <li><span style="color:#aaa;">📍 Castle Hill, NSW</span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>XGYM © 2026. All Rights Reserved.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var btn=document.getElementById('nav-hamburger');
+  var links=document.getElementById('nav-links');
+  if(btn&&links){btn.addEventListener('click',function(){btn.classList.toggle('open');links.classList.toggle('open');});}
+})();
+</script>
+
+</body>
+</html>

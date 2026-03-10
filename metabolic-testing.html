@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>XGYM — Metabolic Testing</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230a0a0a'/%3E%3Ctext y='.9em' font-size='80' x='10' fill='%23c9a84c' font-family='Arial Black,sans-serif' font-weight='900'%3EX%3C/text%3E%3C/svg%3E">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&family=Barlow+Condensed:wght@700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --black: #0a0a0a;
+      --white: #f5f2ec;
+      --gold: #c9a84c;
+      --gold-light: #e8c96a;
+      --mid: #141414;
+      --grey: #888;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    html, body {
+      font-family: 'Barlow', sans-serif;
+      background: var(--black);
+      color: var(--white);
+      line-height: 1.6;
+    }
+    
+    nav { position:sticky; top:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:1.2rem 3rem; background:rgba(10,10,10,0.97); border-bottom:1px solid rgba(255,255,255,0.07); backdrop-filter:blur(10px); }
+    .nav-logo { font-family:'Bebas Neue',sans-serif; font-size:1.8rem; letter-spacing:0.15em; color:var(--white); text-decoration:none; flex-shrink:0; }
+    .nav-logo span { color:var(--gold); }
+    .nav-links { display:flex; align-items:center; gap:2rem; list-style:none; }
+    .nav-link { font-size:0.7rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--white); opacity:0.45; text-decoration:none; transition:opacity 0.2s,color 0.2s; white-space:nowrap; }
+    .nav-link:hover { opacity:1; color:var(--gold); }
+    .nav-link.nav-active { opacity:1; color:var(--gold); }
+    .nav-cta { background:var(--gold); color:var(--black); padding:0.6rem 1.5rem; font-family:'Barlow Condensed',sans-serif; font-size:0.8rem; letter-spacing:0.2em; text-transform:uppercase; font-weight:700; text-decoration:none; transition:background 0.2s; opacity:1!important; white-space:nowrap; }
+    .nav-cta:hover { background:var(--gold-light); }
+    .nav-hamburger { display:none; flex-direction:column; gap:5px; background:none; border:none; cursor:pointer; padding:4px; }
+    .nav-hamburger span { display:block; width:22px; height:2px; background:var(--white); transition:transform 0.25s,opacity 0.25s; }
+    .nav-hamburger.open span:nth-child(1) { transform:translateY(7px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity:0; }
+    .nav-hamburger.open span:nth-child(3) { transform:translateY(-7px) rotate(-45deg); }
+    @media(max-width:860px) { nav{padding:1rem 1.5rem;position:relative;} .nav-hamburger{display:flex;} .nav-links{display:none;flex-direction:column;align-items:flex-start;gap:0;position:absolute;top:100%;left:0;right:0;background:rgba(10,10,10,0.99);border-bottom:1px solid rgba(255,255,255,0.07);padding:0.5rem 0 1rem;} .nav-links.open{display:flex;} .nav-links li{width:100%;} .nav-link{display:block;padding:0.75rem 1.5rem;width:100%;} .nav-cta{margin:0.5rem 1.5rem;display:inline-block;width:auto;} }
+    
+    .hero {
+      height: 45vh; min-height: 360px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      
+      padding: 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .hero-bg {
+      position: absolute; inset: 0;
+      background-image: url('images/team-20.jpg');
+      background-size: cover; background-position: center;
+      filter: brightness(0.4) contrast(1.1);
+    }
+    .hero-content {
+      position: relative;
+      z-index: 20;
+      max-width: 900px;
+    }
+    
+    .hero h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 4.5rem;
+      letter-spacing: 0.08em;
+      margin-bottom: 1.5rem;
+      line-height: 1.1;
+    }
+    
+    .hero p {
+      font-size: 1.2rem;
+      color: #aaa;
+      margin-bottom: 0;
+      font-weight: 300;
+      letter-spacing: 0.02em;
+    }
+    
+    section {
+      padding: 8rem 3rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 900;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    
+    .section-label::before {
+      content: '';
+      display: block;
+      width: 30px;
+      height: 2px;
+      background: var(--gold);
+    }
+    
+    h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem;
+      letter-spacing: 0.08em;
+      margin-bottom: 3rem;
+      line-height: 1.1;
+    }
+    
+    .what-section {
+      background: var(--mid);
+      padding: 3rem;
+      border-radius: 4px;
+      border: 1px solid rgba(201, 168, 76, 0.1);
+      margin-bottom: 2rem;
+    }
+    
+    .what-section h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      letter-spacing: 0.06em;
+      margin-bottom: 1.5rem;
+      color: var(--gold);
+    }
+    
+    .what-section p {
+      color: #aaa;
+      font-size: 0.95rem;
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+      font-weight: 300;
+    }
+    
+    .what-section p:last-child {
+      margin-bottom: 0;
+    }
+    
+    .discover-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+    
+    .discover-card {
+      background: var(--mid);
+      padding: 2.5rem 2rem;
+      border: 1px solid rgba(201, 168, 76, 0.15);
+      border-radius: 4px;
+      transition: all 0.3s ease;
+    }
+    
+    .discover-card:hover {
+      border-color: rgba(201, 168, 76, 0.5);
+      background: rgba(20, 20, 20, 0.8);
+      transform: translateY(-4px);
+    }
+    
+    .discover-card h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem;
+      letter-spacing: 0.08em;
+      margin-bottom: 1rem;
+      color: var(--gold);
+    }
+    
+    .discover-card p {
+      color: #aaa;
+      font-size: 0.95rem;
+      line-height: 1.7;
+      font-weight: 300;
+      margin: 0;
+    }
+    
+    .process-section {
+      background: var(--mid);
+      padding: 4rem;
+      border-radius: 4px;
+      border: 1px solid rgba(201, 168, 76, 0.1);
+    }
+    
+    .process-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      margin-top: 2.5rem;
+    }
+    
+    .process-step {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    .process-step-number {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.5rem;
+      color: var(--gold);
+      opacity: 0.4;
+    }
+    
+    .process-step h4 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.06em;
+    }
+    
+    .process-step p {
+      color: #aaa;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      font-weight: 300;
+    }
+    
+    .benefits-boxes {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+    
+    .benefit-box {
+      background: rgba(201, 168, 76, 0.05);
+      padding: 2rem;
+      border-left: 3px solid var(--gold);
+      border-radius: 2px;
+    }
+    
+    .benefit-box h4 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.2rem;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.8rem;
+      color: var(--gold);
+    }
+    
+    .benefit-box p {
+      color: #aaa;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      font-weight: 300;
+      margin: 0;
+    }
+    
+    .cta-section {
+      background: linear-gradient(135deg, #111 0%, #1a1a1a 100%);
+      padding: 6rem 3rem;
+      text-align: center;
+      border-top: 1px solid rgba(201, 168, 76, 0.2);
+      border-bottom: 1px solid rgba(201, 168, 76, 0.2);
+      margin: 4rem 0;
+    }
+    
+    .cta-section h2 {
+      font-size: 2.8rem;
+      margin-bottom: 1rem;
+    }
+    
+    .btn {
+      background: var(--gold);
+      color: var(--black);
+      padding: 0.9rem 2.5rem;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.9rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+      border-radius: 2px;
+    }
+    
+    .btn:hover {
+      background: var(--gold-light);
+      transform: translateY(-2px);
+    }
+    
+    footer {
+      background: #0a0a0a;
+      border-top: 1px solid #1e1e1e;
+      padding: 56px 20px 32px;
+      font-family: 'Barlow', sans-serif;
+    }
+    
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+      
+      .hero p {
+        font-size: 1rem;
+      }
+      
+      h2 {
+        font-size: 2rem;
+      }
+      
+      section {
+        padding: 4rem 1.5rem;
+      }
+      
+      .process-section {
+        padding: 2rem;
+      }
+      
+      .cta-section {
+        padding: 3rem 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo"><span>X</span>GYM</a>
+  <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="index.html" class="nav-link">Home</a></li>
+    <li><a href="testing.html" class="nav-link">Testing</a></li>
+    <li><a href="library.html" class="nav-link">Training Library</a></li>
+    <li><a href="team.html" class="nav-link">Team</a></li>
+    <li><a href="coaching.html" class="nav-link">Coaching</a></li>
+    <li><a href="memberships.html" class="nav-link">Memberships</a></li>
+    <li><a href="contact.html" class="nav-link">Contact</a></li><li><a href="contact.html" class="nav-cta">Book Now</a></li>
+  </ul>
+</nav>
+
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(10,10,10,0.85));z-index:11;"></div>
+  <div class="hero-content" style="position:relative;z-index:20;">
+    <h1>TRAIN SMARTER. NOT HARDER.</h1>
+    <p>Know your exact metabolic rate and fuel your body with precision</p>
+  </div>
+</div>
+
+<section>
+  <div class="section-label">What Is Metabolic Testing</div>
+  <div class="what-section">
+    <h3>Your Resting Metabolic Rate (RMR)</h3>
+    <p>Metabolic testing measures your Resting Metabolic Rate—the exact number of calories your body burns at rest just to maintain basic functions like breathing, circulation, and cell production. This number forms the foundation of effective nutrition planning.</p>
+    <p>Why does this matter? Most people estimate their calorie needs using generic formulas or online calculators. These estimates can be off by 300-500 calories per day, which completely sabotages fat loss and muscle gain goals. Your actual metabolism is unique based on your age, sex, genetics, muscle mass, hormonal status, and training history.</p>
+    <p>XGYM uses an indirect calorimetry metabolic analyzer that measures the oxygen you consume and carbon dioxide you produce. This shows exactly how many calories your body burns at rest—providing the precise starting point for your nutrition strategy. Combined with your activity level and training, we calculate your total daily energy expenditure (TDEE) and design macronutrient targets specifically for your goals.</p>
+  </div>
+</section>
+
+<section>
+  <div class="section-label">What You'll Discover</div>
+  <h2>Your Metabolic Profile</h2>
+  <div class="discover-cards">
+    <div class="discover-card">
+      <h3>Your RMR</h3>
+      <p>The exact number of calories your body burns at rest (typically 1200-2000+ depending on size, muscle mass, and metabolism). This is your caloric foundation for all nutrition planning.</p>
+    </div>
+    <div class="discover-card">
+      <h3>Metabolic Efficiency</h3>
+      <p>How efficiently your body uses fuel. Some people are "fat burners" while others are "carb utilizers." Understanding this optimizes your macronutrient ratios and energy availability.</p>
+    </div>
+    <div class="discover-card">
+      <h3>Custom Targets</h3>
+      <p>Based on your RMR, activity level, and goal (muscle gain, fat loss, or maintenance), we calculate your personalized daily calorie and macro targets for optimal results.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="section-label">The Process</div>
+  <div class="process-section">
+    <h2>Your Metabolic Test Experience</h2>
+    <div class="process-steps">
+      <div class="process-step">
+        <div class="process-step-number">01</div>
+        <h4>12-Hour Fast</h4>
+        <p>Fast overnight or for 12 hours before your test. No food, coffee, or caffeine. This ensures accurate baseline metabolic measurement.</p>
+      </div>
+      <div class="process-step">
+        <div class="process-step-number">02</div>
+        <h4>Arrive Relaxed</h4>
+        <p>Come to XGYM and relax for 10-15 minutes in a calm environment. We'll take your baseline measurements and position you comfortably for testing.</p>
+      </div>
+      <div class="process-step">
+        <div class="process-step-number">03</div>
+        <h4>Breathe Into Device</h4>
+        <p>Breathe normally through our metabolic analyzer for 15 minutes. It's non-invasive and requires no effort—just relax and breathe while we measure your oxygen consumption.</p>
+      </div>
+      <div class="process-step">
+        <div class="process-step-number">04</div>
+        <h4>Get Your Report</h4>
+        <p>Receive a detailed report showing your RMR, metabolic efficiency, respiratory quotient, and calculated TDEE based on your activity level.</p>
+      </div>
+      <div class="process-step">
+        <div class="process-step-number">05</div>
+        <h4>Nutrition Blueprint</h4>
+        <p>Your coach designs personalized calorie and macro targets for your specific goal. You'll receive a nutrition guide built on YOUR metabolism, not generic estimates.</p>
+      </div>
+      <div class="process-step">
+        <div class="process-step-number">06</div>
+        <h4>Track & Adjust</h4>
+        <p>Follow your personalized plan and retest after 8-12 weeks to see how your metabolism has adapted—especially important if you're in a sustained calorie deficit.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="section-label">Who Benefits</div>
+  <h2>Ideal Candidates for Metabolic Testing</h2>
+  <div class="benefits-boxes">
+    <div class="benefit-box">
+      <h4>Fat Loss Plateau</h4>
+      <p>Stuck despite strict dieting? Your metabolism may have adapted. Testing reveals your actual burn rate so we can adjust your strategy.</p>
+    </div>
+    <div class="benefit-box">
+      <h4>Muscle Gainers</h4>
+      <p>Not seeing muscle growth despite eating "enough"? Testing ensures you're actually in a caloric surplus with proper macros for muscle synthesis.</p>
+    </div>
+    <div class="benefit-box">
+      <h4>Performance Athletes</h4>
+      <p>Athletes requiring precision nutrition use RMR testing to optimize energy availability for training and competition performance.</p>
+    </div>
+    <div class="benefit-box">
+      <h4>Low Energy Issues</h4>
+      <p>Consistently tired despite sleeping enough? Undereating can tank your metabolism. Testing shows if you need more calories to feel energized.</p>
+    </div>
+    <div class="benefit-box">
+      <h4>Metabolic Optimization</h4>
+      <p>Anyone serious about body composition results should understand their actual metabolism rather than guessing with online calculators.</p>
+    </div>
+    <div class="benefit-box">
+      <h4>Long-Term Dieting</h4>
+      <p>On calorie deficit for months? Your RMR changes. Regular retesting ensures your nutrition plan stays aligned with your adapted metabolism.</p>
+    </div>
+  </div>
+</section>
+
+<div class="cta-section">
+  <h2>Book Your Metabolic Test</h2>
+  <p>Stop guessing. Start knowing your actual metabolism.</p>
+  <a href="https://xgym.com.au/metabolic-testing/#book-now" class="btn">Book Now</a>
+</div>
+
+<footer style="background:#0a0a0a;border-top:1px solid #1e1e1e;padding:56px 20px 32px;font-family:'Barlow',sans-serif;">
+  <div style="max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr 1fr;gap:40px;margin-bottom:48px;">
+    <div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;color:#f5f2ec;letter-spacing:0.08em;margin-bottom:14px;"><span style="color:#c9a84c;">X</span>GYM</div>
+      <p style="color:#888;font-size:0.88rem;line-height:1.7;margin:0;">Castle Hill's dedicated strength and performance facility.</p>
+    </div>
+    <div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.78rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#c9a84c;margin-bottom:16px;">Quick Links</div>
+      <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;">
+        <li><a href="index.html" style="color:#aaa;text-decoration:none;font-size:0.88rem;">Home</a></li>
+        <li><a href="testing.html" style="color:#aaa;text-decoration:none;font-size:0.88rem;">Testing</a></li>
+        <li><a href="library.html" style="color:#aaa;text-decoration:none;font-size:0.88rem;">Training Library</a></li>
+        <li><a href="team.html" style="color:#aaa;text-decoration:none;font-size:0.88rem;">Team</a></li>
+        <li><a href="coaching.html" style="color:#aaa;text-decoration:none;font-size:0.88rem;">Coaching</a></li>
+        <li><a href="memberships.html" style="color:#aaa;text-decoration:none;font-size:0.88rem;">Memberships</a></li>
+      </ul>
+    </div>
+    <div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.78rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#c9a84c;margin-bottom:16px;">Contact</div>
+      <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;">
+        <li><a href="tel:0424023601" style="color:#aaa;text-decoration:none;font-size:0.88rem;">📞 0424 023 601</a></li>
+        <li><a href="mailto:admin@xgym.com.au" style="color:#aaa;text-decoration:none;font-size:0.88rem;">✉ admin@xgym.com.au</a></li>
+        <li><span style="color:#aaa;font-size:0.88rem;">📍 Castle Hill, NSW</span></li>
+      </ul>
+    </div>
+  </div>
+  <div style="max-width:1100px;margin:0 auto;border-top:1px solid #1e1e1e;padding-top:24px;text-align:center;">
+    <p style="color:#555;font-size:0.8rem;margin:0;letter-spacing:0.04em;">XGYM © 2026. All Rights Reserved.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var btn=document.getElementById('nav-hamburger');
+  var links=document.getElementById('nav-links');
+  if(btn&&links){btn.addEventListener('click',function(){btn.classList.toggle('open');links.classList.toggle('open');});}
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>XGYM — 12 Week DEXA Body Transformation Challenge</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&family=Barlow+Condensed:wght@700;900&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230a0a0a'/%3E%3Ctext y='.9em' font-size='80' x='10' fill='%23c9a84c' font-family='Arial Black,sans-serif' font-weight='900'%3EX%3C/text%3E%3C/svg%3E">
+  <style>
+    :root {
+      --black: #0a0a0a;
+      --white: #f5f2ec;
+      --gold: #c9a84c;
+      --gold-light: #e8c96a;
+      --mid: #141414;
+      --grey: #888;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      background: var(--black); 
+      color: var(--white); 
+      font-family: 'Barlow', sans-serif; 
+      font-weight: 300;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    nav { 
+      position: sticky; 
+      top: 0; 
+      z-index: 100; 
+      display: flex; 
+      align-items: center; 
+      justify-content: space-between; 
+      padding: 1.2rem 3rem; 
+      background: rgba(10, 10, 10, 0.97); 
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07); 
+      backdrop-filter: blur(10px); 
+    }
+    .nav-logo { 
+      font-family: 'Bebas Neue', sans-serif; 
+      font-size: 1.8rem; 
+      letter-spacing: 0.15em; 
+      color: var(--white); 
+      text-decoration: none; 
+      flex-shrink: 0; 
+    }
+    .nav-logo span { color: var(--gold); }
+    .nav-links { 
+      display: flex; 
+      align-items: center; 
+      gap: 2rem; 
+      list-style: none; 
+    }
+    .nav-link { 
+      font-size: 0.7rem; 
+      letter-spacing: 0.2em; 
+      text-transform: uppercase; 
+      color: var(--white); 
+      opacity: 0.45; 
+      text-decoration: none; 
+      transition: opacity 0.2s, color 0.2s; 
+      white-space: nowrap; 
+    }
+    .nav-link:hover { opacity: 1; color: var(--gold); }
+    .nav-link.nav-active { opacity: 1; color: var(--gold); }
+    .nav-cta { 
+      background: var(--gold); 
+      color: var(--black); 
+      padding: 0.6rem 1.5rem; 
+      font-family: 'Barlow Condensed', sans-serif; 
+      font-size: 0.8rem; 
+      letter-spacing: 0.2em; 
+      text-transform: uppercase; 
+      font-weight: 700; 
+      text-decoration: none; 
+      transition: background 0.2s; 
+      opacity: 1 !important; 
+      white-space: nowrap; 
+    }
+    .nav-cta:hover { background: var(--gold-light); }
+    .nav-hamburger { 
+      display: none; 
+      flex-direction: column; 
+      gap: 5px; 
+      background: none; 
+      border: none; 
+      cursor: pointer; 
+      padding: 4px; 
+    }
+    .nav-hamburger span { 
+      display: block; 
+      width: 22px; 
+      height: 2px; 
+      background: var(--white); 
+      transition: transform 0.25s, opacity 0.25s; 
+    }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    @media(max-width: 860px) {
+      nav { padding: 1rem 1.5rem; position: relative; }
+      .nav-hamburger { display: flex; }
+      .nav-links { 
+        display: none; 
+        flex-direction: column; 
+        align-items: flex-start; 
+        gap: 0; 
+        position: absolute; 
+        top: 100%; 
+        left: 0; 
+        right: 0; 
+        background: rgba(10, 10, 10, 0.99); 
+        border-bottom: 1px solid rgba(255, 255, 255, 0.07); 
+        padding: 0.5rem 0 1rem; 
+      }
+      .nav-links.open { display: flex; }
+      .nav-links li { width: 100%; }
+      .nav-link { display: block; padding: 0.75rem 1.5rem; width: 100%; }
+      .nav-cta { margin: 0.5rem 1.5rem; display: inline-block; width: auto; }
+    }
+    .hero {
+      position: relative; overflow: hidden;
+      height: 45vh; min-height: 360px;
+      
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 3rem;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background-image: url('images/team-01.jpg');
+      background-size: cover; background-position: center;
+      filter: brightness(0.4) contrast(1.1);
+    }
+    .hero-content h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.5rem, 8vw, 5rem);
+      letter-spacing: 0.08em;
+      margin-bottom: 1rem;
+      line-height: 1.1;
+      color: var(--white);
+    }
+    .hero-content p {
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
+      color: var(--gold);
+      letter-spacing: 0.05em;
+      font-weight: 300;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .section {
+      padding: 8rem 3rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .section-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      position: relative;
+      padding-left: 40px;
+    }
+    .section-label::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      width: 30px;
+      height: 1px;
+      background: var(--gold);
+    }
+    .section h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      letter-spacing: 0.06em;
+      margin-bottom: 3rem;
+      text-transform: uppercase;
+      line-height: 1.1;
+    }
+    .intro-box {
+      background: rgba(201, 168, 76, 0.08);
+      border: 1px solid rgba(201, 168, 76, 0.2);
+      padding: 2.5rem;
+      margin-bottom: 3rem;
+      border-radius: 2px;
+    }
+    .intro-box p {
+      font-size: 1rem;
+      line-height: 1.8;
+      color: #c0c0c0;
+      margin-bottom: 1rem;
+    }
+    .intro-box p:last-child {
+      margin-bottom: 0;
+    }
+    .intro-box strong {
+      color: var(--gold);
+      font-weight: 600;
+    }
+    .included-section {
+      background: var(--mid);
+      padding: 3rem;
+      margin-bottom: 3rem;
+      border-left: 4px solid var(--gold);
+    }
+    .included-section h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem;
+      letter-spacing: 0.08em;
+      color: var(--gold);
+      margin-bottom: 2rem;
+      text-transform: uppercase;
+    }
+    .included-list {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+    .included-item {
+      display: flex;
+      gap: 1.5rem;
+      align-items: flex-start;
+    }
+    .included-item-number {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      color: var(--gold);
+      min-width: 50px;
+      text-align: center;
+      font-weight: 700;
+    }
+    .included-item-content h4 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.9rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--white);
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+    }
+    .included-item-content p {
+      font-size: 0.9rem;
+      color: #a0a0a0;
+      line-height: 1.6;
+      margin: 0;
+    }
+    .results-section {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+    .result-card {
+      background: var(--mid);
+      padding: 2.5rem;
+      border: 1px solid rgba(201, 168, 76, 0.2);
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+    .result-card:hover {
+      border-color: var(--gold);
+      background: rgba(201, 168, 76, 0.05);
+      transform: translateY(-4px);
+    }
+    .result-card-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.8rem;
+      font-weight: 700;
+    }
+    .result-card-value {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.5rem;
+      letter-spacing: 0.08em;
+      color: var(--white);
+      margin-bottom: 0.5rem;
+    }
+    .result-card p {
+      font-size: 0.85rem;
+      color: #a0a0a0;
+      line-height: 1.5;
+    }
+    .who-can-join {
+      background: rgba(201, 168, 76, 0.05);
+      border: 1px solid rgba(201, 168, 76, 0.2);
+      padding: 2.5rem;
+      margin-bottom: 3rem;
+      border-radius: 2px;
+    }
+    .who-can-join h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem;
+      letter-spacing: 0.08em;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+    }
+    .who-can-join p {
+      font-size: 0.95rem;
+      color: #b0b0b0;
+      line-height: 1.7;
+      margin-bottom: 0.8rem;
+    }
+    .who-can-join p:last-child {
+      margin-bottom: 0;
+    }
+    .next-intake {
+      background: var(--mid);
+      padding: 3rem;
+      margin-bottom: 3rem;
+      border: 1px solid rgba(201, 168, 76, 0.2);
+      text-align: center;
+    }
+    .next-intake h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem;
+      letter-spacing: 0.08em;
+      color: var(--gold);
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+    }
+    .next-intake p {
+      font-size: 1rem;
+      color: #b0b0b0;
+      line-height: 1.7;
+      margin: 0;
+    }
+    .cta-section {
+      background: linear-gradient(135deg, var(--mid) 0%, rgba(25, 25, 25, 0.6) 100%);
+      padding: 4rem 3rem;
+      text-align: center;
+      border: 1px solid rgba(201, 168, 76, 0.2);
+    }
+    .cta-section h2 {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    .cta-section p {
+      font-size: 1rem;
+      color: #a0a0a0;
+      margin-bottom: 2rem;
+    }
+    .btn {
+      background: var(--gold);
+      color: var(--black);
+      padding: 1rem 2.5rem;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
+    }
+    .btn:hover {
+      background: var(--gold-light);
+    }
+    footer {
+      background: #0a0a0a;
+      border-top: 1px solid #1e1e1e;
+      padding: 56px 20px 32px;
+      font-family: 'Barlow', sans-serif;
+    }
+    footer > div {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 48px;
+    }
+    .footer-col {
+      line-height: 1.7;
+    }
+    .footer-col > div:first-child {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      color: #f5f2ec;
+      letter-spacing: 0.08em;
+      margin-bottom: 14px;
+    }
+    .footer-col > div:first-child span {
+      color: #c9a84c;
+    }
+    .footer-col > p {
+      color: #888;
+      font-size: 0.88rem;
+      margin: 0;
+    }
+    .footer-col h4 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #c9a84c;
+      margin-bottom: 16px;
+    }
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .footer-col a {
+      color: #aaa;
+      text-decoration: none;
+      font-size: 0.88rem;
+    }
+    .footer-col a:hover {
+      color: #c9a84c;
+    }
+    .footer-bottom {
+      border-top: 1px solid #1e1e1e;
+      padding-top: 24px;
+      text-align: center;
+    }
+    .footer-bottom p {
+      color: #555;
+      font-size: 0.8rem;
+      margin: 0;
+      letter-spacing: 0.04em;
+    }
+    @media(max-width: 768px) {
+      .section { padding: 4rem 1.5rem; }
+      .footer-grid { grid-template-columns: 1fr; gap: 30px; }
+      .hero {
+      position: relative; overflow: hidden; height: auto; padding: 4rem 2rem; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="nav-logo"><span>X</span>GYM</a>
+    <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html" class="nav-link">Home</a></li>
+      <li><a href="testing.html" class="nav-link">Testing</a></li>
+      <li><a href="library.html" class="nav-link">Training Library</a></li>
+      <li><a href="team.html" class="nav-link">Team</a></li>
+      <li><a href="coaching.html" class="nav-link">Coaching</a></li>
+      <li><a href="memberships.html" class="nav-link">Memberships</a></li>
+      <li><a href="contact.html" class="nav-link">Contact</a></li><li><a href="contact.html" class="nav-cta">Book Now</a></li>
+    </ul>
+  </nav>
+
+  <div class="hero">
+    <div class="hero-bg"></div>
+    <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(10,10,10,0.85));z-index:11;"></div>
+    <div class="hero-content" style="position:relative;z-index:20;">
+      <h1>12 Weeks. Measured. Proven.</h1>
+      <p>The only transformation challenge with DEXA scans to track real results. Medical-grade data showing exactly what changed.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">What Makes This Different</div>
+    <h2>Real Results, Real Proof</h2>
+    
+    <div class="intro-box">
+      <p>Unlike typical transformation challenges, every participant in the XGYM 12-Week DEXA Challenge gets a <strong>DEXA scan at the start and at the end</strong>. No selfies. No guessing. No vanity metrics.</p>
+      <p>You'll have <strong>undeniable, medical-grade data</strong> showing exactly how much body fat you lost, how much muscle you gained (or maintained), and precisely how your body composition changed over 12 weeks. This is the gold standard in body transformation measurement—the same technology used in clinical and research settings.</p>
+      <p>Every participant receives professional coaching, structured training programming, nutrition targets based on metabolic testing, and weekly check-ins. You're not doing this alone. You're doing this with a coach, with a community, and with proof.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">What's Included</div>
+    <h2>Your Complete 12-Week Program</h2>
+    
+    <div class="included-section">
+      <h3>Everything You Need</h3>
+      <div class="included-list">
+        <div class="included-item">
+          <div class="included-item-number">1</div>
+          <div class="included-item-content">
+            <h4>Initial DEXA Scan & Coach Onboarding</h4>
+            <p>Week 1 begins with your baseline DEXA scan, RMR test, and full body composition assessment. You'll then connect with your assigned coach to review results and set 12-week targets.</p>
+          </div>
+        </div>
+        <div class="included-item">
+          <div class="included-item-number">2</div>
+          <div class="included-item-content">
+            <h4>Structured 12-Week Training Program</h4>
+            <p>Receive a detailed, periodised training program designed for body composition change. Progressive overload, exercise variation, and strategic volume management throughout the 12 weeks.</p>
+          </div>
+        </div>
+        <div class="included-item">
+          <div class="included-item-number">3</div>
+          <div class="included-item-content">
+            <h4>Nutrition Targets Based on Your RMR</h4>
+            <p>Your daily calorie and macro targets are determined by your measured resting metabolic rate, not generic calculators. These adjust throughout the program as needed.</p>
+          </div>
+        </div>
+        <div class="included-item">
+          <div class="included-item-number">4</div>
+          <div class="included-item-content">
+            <h4>Weekly Check-ins With Your Coach</h4>
+            <p>Every week, connect with your coach to discuss progress, ask questions, adjust your program, and receive accountability and support as you work toward your goal.</p>
+          </div>
+        </div>
+        <div class="included-item">
+          <div class="included-item-number">5</div>
+          <div class="included-item-content">
+            <h4>Final DEXA Scan & Results Debrief</h4>
+            <p>Week 12 concludes with your final DEXA scan. Your coach will review the results, show you exactly what changed, and debrief on your transformation and next steps.</p>
+          </div>
+        </div>
+        <div class="included-item">
+          <div class="included-item-number">6</div>
+          <div class="included-item-content">
+            <h4>Certificate & Community Recognition</h4>
+            <p>Complete the challenge and earn your XGYM 12-Week Challenge Certificate. Top performers are recognised and celebrated on our channels.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">The Results Are Real</div>
+    <h2>DEXA Verified Transformation</h2>
+    
+    <div class="results-section">
+      <div class="result-card">
+        <div class="result-card-label">Measurement Type</div>
+        <div class="result-card-value">DEXA</div>
+        <p>Medical-grade body composition analysis. Not estimates, not predictions. Actual measured data.</p>
+      </div>
+      <div class="result-card">
+        <div class="result-card-label">Program Duration</div>
+        <div class="result-card-value">12 WKS</div>
+        <p>Structured, coached, 12-week transformation program with clear start and finish dates.</p>
+      </div>
+      <div class="result-card">
+        <div class="result-card-label">Data-Driven</div>
+        <div class="result-card-value">100%</div>
+        <p>Every decision backed by your individual metabolic data and body composition measurements.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="who-can-join">
+      <h3>Who Can Join</h3>
+      <p><strong>Open to members and non-members.</strong> Whether you're a current XGYM member or training elsewhere, you can participate.</p>
+      <p><strong>All fitness levels welcome.</strong> Beginners starting their transformation journey, intermediate lifters looking to lean out, experienced athletes aiming for precision body composition work—everyone has a place in this challenge.</p>
+      <p><strong>Limited spots per cohort.</strong> We keep each cohort small to ensure your coach can give you personalised attention. First come, first served within each intake.</p>
+    </div>
+
+    <div class="next-intake">
+      <h3>Next Intake & Waitlist</h3>
+      <p>Intake dates are announced via our Instagram and email list. <strong>Join the waitlist to be notified first</strong> when the next cohort opens. Limited spots fill quickly.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="cta-section">
+      <h2>Ready to Transform With Proof?</h2>
+      <p>Join the waitlist for the next 12-Week DEXA Challenge intake. Be among the first to know when enrollment opens.</p>
+      <a href="mailto:admin@xgym.com.au" class="btn">Join The Waitlist</a>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div><span>X</span>GYM</div>
+        <p>Castle Hill's dedicated strength and performance facility.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="testing.html">Testing</a></li>
+          <li><a href="library.html">Training Library</a></li>
+          <li><a href="team.html">Team</a></li>
+          <li><a href="coaching.html">Coaching</a></li>
+          <li><a href="memberships.html">Memberships</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="tel:0424023601">📞 0424 023 601</a></li>
+          <li><a href="mailto:admin@xgym.com.au">✉ admin@xgym.com.au</a></li>
+          <li><span style="color: #aaa; font-size: 0.88rem;">📍 Castle Hill, NSW</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>XGYM © 2026. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    (function(){
+      var btn = document.getElementById('nav-hamburger');
+      var links = document.getElementById('nav-links');
+      if(btn && links) {
+        btn.addEventListener('click', function(){
+          btn.classList.toggle('open');
+          links.classList.toggle('open');
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

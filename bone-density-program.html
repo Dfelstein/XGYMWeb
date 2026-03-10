@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>XGYM — Bone Density Program</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&family=Barlow+Condensed:wght@700;900&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230a0a0a'/%3E%3Ctext y='.9em' font-size='80' x='10' fill='%23c9a84c' font-family='Arial Black,sans-serif' font-weight='900'%3EX%3C/text%3E%3C/svg%3E">
+  <style>
+    :root {
+      --black: #0a0a0a;
+      --white: #f5f2ec;
+      --gold: #c9a84c;
+      --gold-light: #e8c96a;
+      --mid: #141414;
+      --grey: #888;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Barlow', sans-serif;
+      background: var(--black);
+      color: var(--white);
+      line-height: 1.6;
+    }
+
+    nav { position:sticky; top:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:1.2rem 3rem; background:rgba(10,10,10,0.97); border-bottom:1px solid rgba(255,255,255,0.07); backdrop-filter:blur(10px); }
+    .nav-logo { font-family:'Bebas Neue',sans-serif; font-size:1.8rem; letter-spacing:0.15em; color:var(--white); text-decoration:none; flex-shrink:0; }
+    .nav-logo span { color:var(--gold); }
+    .nav-links { display:flex; align-items:center; gap:2rem; list-style:none; }
+    .nav-link { font-size:0.7rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--white); opacity:0.45; text-decoration:none; transition:opacity 0.2s,color 0.2s; white-space:nowrap; }
+    .nav-link:hover { opacity:1; color:var(--gold); }
+    .nav-link.nav-active { opacity:1; color:var(--gold); }
+    .nav-cta { background:var(--gold); color:var(--black); padding:0.6rem 1.5rem; font-family:'Barlow Condensed',sans-serif; font-size:0.8rem; letter-spacing:0.2em; text-transform:uppercase; font-weight:700; text-decoration:none; transition:background 0.2s; opacity:1!important; white-space:nowrap; }
+    .nav-cta:hover { background:var(--gold-light); }
+    .nav-hamburger { display:none; flex-direction:column; gap:5px; background:none; border:none; cursor:pointer; padding:4px; }
+    .nav-hamburger span { display:block; width:22px; height:2px; background:var(--white); transition:transform 0.25s,opacity 0.25s; }
+    .nav-hamburger.open span:nth-child(1) { transform:translateY(7px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity:0; }
+    .nav-hamburger.open span:nth-child(3) { transform:translateY(-7px) rotate(-45deg); }
+    @media(max-width:860px) { nav{padding:1rem 1.5rem;position:relative;} .nav-hamburger{display:flex;} .nav-links{display:none;flex-direction:column;align-items:flex-start;gap:0;position:absolute;top:100%;left:0;right:0;background:rgba(10,10,10,0.99);border-bottom:1px solid rgba(255,255,255,0.07);padding:0.5rem 0 1rem;} .nav-links.open{display:flex;} .nav-links li{width:100%;} .nav-link{display:block;padding:0.75rem 1.5rem;width:100%;} .nav-cta{margin:0.5rem 1.5rem;display:inline-block;width:auto;} }
+
+    .hero {
+      
+      height: 45vh; min-height: 360px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute; inset: 0;
+      background-image: url('images/team-01.jpg');
+      background-size: cover; background-position: center;
+      filter: brightness(0.4) contrast(1.1);
+    }
+    .hero-content {
+      position: relative;
+      z-index: 20;
+      max-width: 900px;
+    }
+
+    .hero h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 5rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+      color: var(--white);
+      line-height: 1.1;
+    }
+
+    .hero p {
+      font-size: 1.1rem;
+      color: rgba(245, 242, 236, 0.75);
+      font-weight: 300;
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.8;
+    }
+
+    section {
+      padding: 8rem 3rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 700;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .section-label::before {
+      content: '';
+      width: 30px;
+      height: 2px;
+      background: var(--gold);
+    }
+
+    .text-section {
+      font-size: 1.05rem;
+      color: rgba(245, 242, 236, 0.8);
+      line-height: 1.9;
+      margin: 2rem 0;
+      max-width: 1000px;
+    }
+
+    .problem-section {
+      background: rgba(20, 20, 20, 0.4);
+      border-left: 4px solid #c9344d;
+      padding: 2.5rem;
+      margin: 3rem 0;
+      border-radius: 4px;
+    }
+
+    .problem-section h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      letter-spacing: 0.1em;
+      color: var(--white);
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+
+    .problem-section p {
+      font-size: 1.05rem;
+      color: rgba(245, 242, 236, 0.8);
+      line-height: 1.9;
+      margin-bottom: 1rem;
+    }
+
+    .solution-section {
+      background: rgba(201, 168, 76, 0.08);
+      border-left: 4px solid var(--gold);
+      padding: 2.5rem;
+      margin: 3rem 0;
+      border-radius: 4px;
+    }
+
+    .solution-section h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      letter-spacing: 0.1em;
+      color: var(--white);
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+
+    .solution-section p {
+      font-size: 1.05rem;
+      color: rgba(245, 242, 236, 0.8);
+      line-height: 1.9;
+      margin-bottom: 1rem;
+    }
+
+    .included-section {
+      margin: 3rem 0;
+    }
+
+    .included-section h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      letter-spacing: 0.1em;
+      color: var(--white);
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+    }
+
+    .steps-list {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .step {
+      display: flex;
+      gap: 2rem;
+      align-items: flex-start;
+    }
+
+    .step-number {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem;
+      color: var(--gold);
+      font-weight: 700;
+      flex-shrink: 0;
+      width: 80px;
+    }
+
+    .step-content h4 {
+      font-family: 'Barlow', sans-serif;
+      font-size: 1.2rem;
+      color: var(--white);
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .step-content p {
+      font-size: 1rem;
+      color: rgba(245, 242, 236, 0.8);
+      line-height: 1.8;
+    }
+
+    .for-section {
+      background: rgba(20, 20, 20, 0.4);
+      border: 1px solid rgba(201, 168, 76, 0.15);
+      padding: 2.5rem;
+      margin: 3rem 0;
+      border-radius: 4px;
+    }
+
+    .for-section h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.6rem;
+      letter-spacing: 0.1em;
+      color: var(--white);
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+
+    .for-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+
+    .for-item {
+      font-size: 1rem;
+      color: rgba(245, 242, 236, 0.8);
+      line-height: 1.8;
+      padding: 1rem 0 1rem 2rem;
+      position: relative;
+    }
+
+    .for-item::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: var(--gold);
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+
+    .evidence-section {
+      background: rgba(20, 20, 20, 0.6);
+      border: 1px solid rgba(201, 168, 76, 0.2);
+      padding: 2.5rem;
+      margin: 3rem 0;
+      border-radius: 8px;
+    }
+
+    .evidence-section h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.6rem;
+      letter-spacing: 0.1em;
+      color: var(--white);
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+
+    .evidence-section p {
+      font-size: 1.05rem;
+      color: rgba(245, 242, 236, 0.8);
+      line-height: 1.9;
+    }
+
+    .cta-section {
+      background: linear-gradient(135deg, rgba(201, 168, 76, 0.1) 0%, rgba(201, 168, 76, 0.05) 100%);
+      border: 1px solid rgba(201, 168, 76, 0.2);
+      padding: 4rem 3rem;
+      text-align: center;
+      border-radius: 8px;
+      margin-top: 4rem;
+    }
+
+    .cta-section h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+      color: var(--white);
+    }
+
+    .cta-btn {
+      background: var(--gold);
+      color: var(--black);
+      padding: 1rem 2.5rem;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-weight: 700;
+      text-decoration: none;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.3s;
+      display: inline-block;
+    }
+
+    .cta-btn:hover {
+      background: var(--gold-light);
+    }
+
+    footer {
+      background: #0a0a0a;
+      border-top: 1px solid #1e1e1e;
+      padding: 56px 20px 32px;
+      font-family: 'Barlow', sans-serif;
+    }
+
+    .footer-content {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 48px;
+    }
+
+    .footer-section h4 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 16px;
+    }
+
+    .footer-section p {
+      color: #888;
+      font-size: 0.88rem;
+      line-height: 1.7;
+      margin: 0;
+    }
+
+    .footer-section ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-section a {
+      color: #aaa;
+      text-decoration: none;
+      font-size: 0.88rem;
+    }
+
+    .footer-section a:hover {
+      color: var(--gold);
+    }
+
+    .footer-bottom {
+      max-width: 1100px;
+      margin: 0 auto;
+      border-top: 1px solid #1e1e1e;
+      padding-top: 24px;
+      text-align: center;
+    }
+
+    .footer-bottom p {
+      color: #555;
+      font-size: 0.8rem;
+      margin: 0;
+      letter-spacing: 0.04em;
+    }
+
+    @media (max-width: 1024px) {
+      .for-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero h1 {
+        font-size: 3.5rem;
+      }
+
+      section {
+        padding: 6rem 2rem;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+
+      .hero p {
+        font-size: 1rem;
+      }
+
+      .step {
+        gap: 1rem;
+      }
+
+      .step-number {
+        font-size: 2rem;
+        width: 50px;
+      }
+
+      .footer-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      section {
+        padding: 4rem 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo"><span>X</span>GYM</a>
+  <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="index.html" class="nav-link">Home</a></li>
+    <li><a href="testing.html" class="nav-link">Testing</a></li>
+    <li><a href="library.html" class="nav-link">Training Library</a></li>
+    <li><a href="team.html" class="nav-link">Team</a></li>
+    <li><a href="coaching.html" class="nav-link">Coaching</a></li>
+    <li><a href="memberships.html" class="nav-link">Memberships</a></li>
+    <li><a href="contact.html" class="nav-link">Contact</a></li><li><a href="contact.html" class="nav-cta">Book Now</a></li>
+  </ul>
+</nav>
+
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(10,10,10,0.85));z-index:11;"></div>
+  <div class="hero-content" style="position:relative;z-index:20;">
+    <h1>Stronger Bones. Longer Life.</h1>
+    <p>XGYM's specialised program for improving bone mineral density through targeted resistance training and evidence-based protocols.</p>
+  </div>
+</div>
+
+<section>
+  <div class="section-label">The Challenge</div>
+
+  <div class="problem-section">
+    <h3>The Problem Most People Ignore</h3>
+    <p>Osteoporosis affects over 1 million Australians, yet most don't realise they're at risk until it's too late. Bone mineral density peaks in your 30s and begins declining with age—particularly accelerating after 50 for men and after menopause for women.</p>
+    <p>While your muscles and strength may feel stable, your bones are silently losing density. Falls that would be minor for younger people become fracture risks. Hip, spine, and wrist fractures dramatically reduce quality of life and independence.</p>
+    <p>The tragic part? This is preventable with proper training and lifestyle strategies.</p>
+  </div>
+
+  <div class="section-label" style="margin-top: 4rem;">The Solution</div>
+
+  <div class="solution-section">
+    <h3>XGYM's Bone Density Program</h3>
+    <p>Resistance training is the most effective intervention for building and maintaining bone mineral density. Not cardio. Not supplements alone. Heavy compound lifts that load your skeleton with progressive force.</p>
+    <p>Our Bone Density Program combines baseline DEXA scanning to establish your current state, periodised resistance training emphasising heavy compound lifts (squats, deadlifts, presses), progressive overload protocols specifically designed for bone adaptation, and evidence-based nutrition strategies around calcium, Vitamin D, and magnesium.</p>
+    <p>We track your progress with follow-up DEXA scans to verify real improvements in bone mineral density—something you can't see in a mirror, but something you'll feel for the rest of your life.</p>
+  </div>
+
+  <div class="included-section">
+    <h3>What's Included</h3>
+    <div class="steps-list">
+      <div class="step">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <h4>Initial DEXA Scan</h4>
+          <p>Establish your baseline bone mineral density across key skeletal sites (spine, hips, forearms). This gives us concrete data on your starting point and identifies any areas of concern.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <h4>12-Week Progressive Loading Program</h4>
+          <p>Coach-designed resistance training emphasising compound movements with progressive overload. Structured specifically to create the mechanical loading stimulus that drives bone adaptation.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">3</div>
+        <div class="step-content">
+          <h4>Nutrition Assessment & Supplementation Guidance</h4>
+          <p>Evaluate your current calcium and Vitamin D intake. Receive specific recommendations for diet optimisation and any necessary supplementation to support bone mineralisation.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">4</div>
+        <div class="step-content">
+          <h4>Mid-Point Check-In & Program Adjustment</h4>
+          <p>We review your progress, assess technique, and adjust your training load and exercise selection based on your response. Ensuring you stay on track for optimal results.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">5</div>
+        <div class="step-content">
+          <h4>Final DEXA Scan & Results Review</h4>
+          <p>Compare your final bone mineral density against your baseline. See the concrete improvements in bone density and establish long-term maintenance protocols for ongoing strength.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="for-section">
+    <h3>Who This Program Is For</h3>
+    <div class="for-grid">
+      <div class="for-item">Women over 40 concerned about osteoporosis risk</div>
+      <div class="for-item">Men over 50 with declining bone density</div>
+      <div class="for-item">Anyone with a low bone density diagnosis</div>
+      <div class="for-item">People with family history of osteoporosis</div>
+      <div class="for-item">Athletes returning from long injury layoffs</div>
+      <div class="for-item">Anyone prioritising long-term health and longevity</div>
+    </div>
+  </div>
+
+  <div class="evidence-section">
+    <h3>The Science</h3>
+    <p>Resistance training is the most evidence-backed intervention for improving bone mineral density. Heavy compound lifts generate the mechanical loading stimulus that triggers osteoblast activity and bone formation. Progressive overload—progressively increasing resistance—is critical. Your bones adapt to the demands placed on them, just like your muscles do. Start with your baseline, progressively increase loading over 12 weeks, and remeasure to verify adaptation. This isn't theoretical—it's measurable, reproducible, and proven across decades of exercise science research.</p>
+  </div>
+
+  <div class="cta-section">
+    <h3>Start Your Bone Density Journey</h3>
+    <p style="font-size: 1.05rem; color: rgba(245, 242, 236, 0.8); margin-bottom: 2rem;">Take control of your skeletal health today. Book your initial DEXA scan and begin your 12-week program.</p>
+    <a href="https://xgym.com.au/dexa-scan/#book-now" target="_blank" class="cta-btn">Book Your DEXA Scan</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-content">
+    <div class="footer-section">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;color:#f5f2ec;letter-spacing:0.08em;margin-bottom:14px;"><span style="color:#c9a84c;">X</span>GYM</div>
+      <p>Castle Hill's dedicated strength and performance facility.</p>
+    </div>
+    <div class="footer-section">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="testing.html">Testing</a></li>
+        <li><a href="library.html">Training Library</a></li>
+        <li><a href="team.html">Team</a></li>
+        <li><a href="coaching.html">Coaching</a></li>
+        <li><a href="memberships.html">Memberships</a></li>
+      </ul>
+    </div>
+    <div class="footer-section">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="tel:0424023601">📞 0424 023 601</a></li>
+        <li><a href="mailto:admin@xgym.com.au">✉ admin@xgym.com.au</a></li>
+        <li><span style="color:#aaa;">📍 Castle Hill, NSW</span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>XGYM © 2026. All Rights Reserved.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var btn=document.getElementById('nav-hamburger');
+  var links=document.getElementById('nav-links');
+  if(btn&&links){btn.addEventListener('click',function(){btn.classList.toggle('open');links.classList.toggle('open');});}
+})();
+</script>
+
+</body>
+</html>

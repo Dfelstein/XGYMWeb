@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>XGYM — eBooks & Guides</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&family=Barlow+Condensed:wght@700;900&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230a0a0a'/%3E%3Ctext y='.9em' font-size='80' x='10' fill='%23c9a84c' font-family='Arial Black,sans-serif' font-weight='900'%3EX%3C/text%3E%3C/svg%3E">
+  <style>
+    :root {
+      --black: #0a0a0a;
+      --white: #f5f2ec;
+      --gold: #c9a84c;
+      --gold-light: #e8c96a;
+      --mid: #141414;
+      --grey: #888;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Barlow', sans-serif;
+      background: var(--black);
+      color: var(--white);
+      line-height: 1.6;
+    }
+
+    nav { position:sticky; top:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:1.2rem 3rem; background:rgba(10,10,10,0.97); border-bottom:1px solid rgba(255,255,255,0.07); backdrop-filter:blur(10px); }
+    .nav-logo { font-family:'Bebas Neue',sans-serif; font-size:1.8rem; letter-spacing:0.15em; color:var(--white); text-decoration:none; flex-shrink:0; }
+    .nav-logo span { color:var(--gold); }
+    .nav-links { display:flex; align-items:center; gap:2rem; list-style:none; }
+    .nav-link { font-size:0.7rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--white); opacity:0.45; text-decoration:none; transition:opacity 0.2s,color 0.2s; white-space:nowrap; }
+    .nav-link:hover { opacity:1; color:var(--gold); }
+    .nav-link.nav-active { opacity:1; color:var(--gold); }
+    .nav-cta { background:var(--gold); color:var(--black); padding:0.6rem 1.5rem; font-family:'Barlow Condensed',sans-serif; font-size:0.8rem; letter-spacing:0.2em; text-transform:uppercase; font-weight:700; text-decoration:none; transition:background 0.2s; opacity:1!important; white-space:nowrap; }
+    .nav-cta:hover { background:var(--gold-light); }
+    .nav-hamburger { display:none; flex-direction:column; gap:5px; background:none; border:none; cursor:pointer; padding:4px; }
+    .nav-hamburger span { display:block; width:22px; height:2px; background:var(--white); transition:transform 0.25s,opacity 0.25s; }
+    .nav-hamburger.open span:nth-child(1) { transform:translateY(7px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity:0; }
+    .nav-hamburger.open span:nth-child(3) { transform:translateY(-7px) rotate(-45deg); }
+    @media(max-width:860px) { nav{padding:1rem 1.5rem;position:relative;} .nav-hamburger{display:flex;} .nav-links{display:none;flex-direction:column;align-items:flex-start;gap:0;position:absolute;top:100%;left:0;right:0;background:rgba(10,10,10,0.99);border-bottom:1px solid rgba(255,255,255,0.07);padding:0.5rem 0 1rem;} .nav-links.open{display:flex;} .nav-links li{width:100%;} .nav-link{display:block;padding:0.75rem 1.5rem;width:100%;} .nav-cta{margin:0.5rem 1.5rem;display:inline-block;width:auto;} }
+
+    .hero {
+      
+      height: 45vh; min-height: 360px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute; inset: 0;
+      background-image: url('images/p1-05.jpg');
+      background-size: cover; background-position: center;
+      filter: brightness(0.4) contrast(1.1);
+    }
+    .hero-content {
+      position: relative;
+      z-index: 20;
+      max-width: 900px;
+    }
+
+    .hero h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 5rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+      color: var(--white);
+      line-height: 1.1;
+    }
+
+    .hero p {
+      font-size: 1.1rem;
+      color: rgba(245, 242, 236, 0.75);
+      font-weight: 300;
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.8;
+    }
+
+    section {
+      padding: 8rem 3rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 700;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .section-label::before {
+      content: '';
+      width: 30px;
+      height: 2px;
+      background: var(--gold);
+    }
+
+    .intro-text {
+      font-size: 1.15rem;
+      color: rgba(245, 242, 236, 0.8);
+      max-width: 900px;
+      margin: 2rem 0 4rem;
+      line-height: 1.9;
+      font-weight: 300;
+    }
+
+    .ebooks-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2.5rem;
+      margin: 4rem 0;
+    }
+
+    .ebook-card {
+      background: rgba(20, 20, 20, 0.6);
+      border: 1px solid rgba(201, 168, 76, 0.15);
+      padding: 2.5rem;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .ebook-card:hover {
+      border-color: rgba(201, 168, 76, 0.4);
+      background: rgba(20, 20, 20, 0.8);
+      transform: translateY(-5px);
+    }
+
+    .ebook-card h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      letter-spacing: 0.08em;
+      color: var(--white);
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+      line-height: 1.3;
+      min-height: 60px;
+    }
+
+    .ebook-card p {
+      font-size: 0.95rem;
+      color: rgba(245, 242, 236, 0.7);
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+      flex-grow: 1;
+    }
+
+    .ebook-badge {
+      display: inline-block;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 0.5rem 1rem;
+      background: rgba(201, 168, 76, 0.15);
+      color: var(--gold);
+      border-radius: 3px;
+      margin-bottom: 1.5rem;
+      font-weight: 700;
+      width: fit-content;
+    }
+
+    .ebook-badge.coming-soon {
+      background: rgba(136, 136, 136, 0.15);
+      color: var(--grey);
+    }
+
+    .ebook-btn {
+      background: var(--gold);
+      color: var(--black);
+      padding: 0.9rem 2rem;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-weight: 700;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.3s;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .ebook-btn:hover {
+      background: var(--gold-light);
+    }
+
+    .ebook-btn.secondary {
+      background: rgba(201, 168, 76, 0.15);
+      color: var(--gold);
+    }
+
+    .ebook-btn.secondary:hover {
+      background: rgba(201, 168, 76, 0.25);
+    }
+
+    .note-section {
+      background: rgba(20, 20, 20, 0.4);
+      border-left: 3px solid var(--gold);
+      padding: 2rem 2.5rem;
+      margin: 4rem 0;
+      border-radius: 4px;
+    }
+
+    .note-section p {
+      font-size: 1rem;
+      color: rgba(245, 242, 236, 0.8);
+      line-height: 1.8;
+      margin: 0;
+    }
+
+    .cta-section {
+      background: linear-gradient(135deg, rgba(201, 168, 76, 0.1) 0%, rgba(201, 168, 76, 0.05) 100%);
+      border: 1px solid rgba(201, 168, 76, 0.2);
+      padding: 4rem 3rem;
+      text-align: center;
+      border-radius: 8px;
+      margin-top: 4rem;
+    }
+
+    .cta-section h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+      color: var(--white);
+    }
+
+    .cta-section a {
+      background: var(--gold);
+      color: var(--black);
+      padding: 1rem 2.5rem;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-weight: 700;
+      text-decoration: none;
+      border-radius: 4px;
+      transition: background 0.3s;
+      display: inline-block;
+    }
+
+    .cta-section a:hover {
+      background: var(--gold-light);
+    }
+
+    footer {
+      background: #0a0a0a;
+      border-top: 1px solid #1e1e1e;
+      padding: 56px 20px 32px;
+      font-family: 'Barlow', sans-serif;
+    }
+
+    .footer-content {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 48px;
+    }
+
+    .footer-section h4 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 16px;
+    }
+
+    .footer-section p {
+      color: #888;
+      font-size: 0.88rem;
+      line-height: 1.7;
+      margin: 0;
+    }
+
+    .footer-section ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-section a {
+      color: #aaa;
+      text-decoration: none;
+      font-size: 0.88rem;
+    }
+
+    .footer-section a:hover {
+      color: var(--gold);
+    }
+
+    .footer-bottom {
+      max-width: 1100px;
+      margin: 0 auto;
+      border-top: 1px solid #1e1e1e;
+      padding-top: 24px;
+      text-align: center;
+    }
+
+    .footer-bottom p {
+      color: #555;
+      font-size: 0.8rem;
+      margin: 0;
+      letter-spacing: 0.04em;
+    }
+
+    @media (max-width: 1024px) {
+      .ebooks-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .hero h1 {
+        font-size: 3.5rem;
+      }
+
+      section {
+        padding: 6rem 2rem;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .ebooks-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+
+      .hero p {
+        font-size: 1rem;
+      }
+
+      .footer-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      section {
+        padding: 4rem 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo"><span>X</span>GYM</a>
+  <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="index.html" class="nav-link">Home</a></li>
+    <li><a href="testing.html" class="nav-link">Testing</a></li>
+    <li><a href="library.html" class="nav-link">Training Library</a></li>
+    <li><a href="team.html" class="nav-link">Team</a></li>
+    <li><a href="coaching.html" class="nav-link">Coaching</a></li>
+    <li><a href="memberships.html" class="nav-link">Memberships</a></li>
+    <li><a href="contact.html" class="nav-link">Contact</a></li><li><a href="contact.html" class="nav-cta">Book Now</a></li>
+  </ul>
+</nav>
+
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(10,10,10,0.85));z-index:11;"></div>
+  <div class="hero-content" style="position:relative;z-index:20;">
+    <h1>Knowledge Is A Training Tool</h1>
+    <p>Master the science behind strength, body composition, and performance with XGYM's curated collection of eBooks and educational guides.</p>
+  </div>
+</div>
+
+<section>
+  <div class="section-label">Featured Resources</div>
+  
+  <p class="intro-text">XGYM's coaches have compiled their expertise into practical, evidence-based guides for athletes at every level. Whether you're just starting your strength journey or preparing for competition, our resources provide actionable strategies backed by science.</p>
+
+  <div class="ebooks-grid">
+    <div class="ebook-card">
+      <h3>The XGYM Strength Foundation</h3>
+      <p>Everything you need to know about building a solid foundation in strength training. This comprehensive guide covers movement patterns, programming basics, and nutrition fundamentals for beginners.</p>
+      <span class="ebook-badge">Free</span>
+      <button class="ebook-btn">Download</button>
+    </div>
+
+    <div class="ebook-card">
+      <h3>DEXA Decoded</h3>
+      <p>Understand your body composition results and what they mean for your training. Learn how to interpret fat mass, lean mass, and bone density metrics to optimize your programming.</p>
+      <span class="ebook-badge">Free</span>
+      <button class="ebook-btn">Download</button>
+    </div>
+
+    <div class="ebook-card">
+      <h3>Nutrition for Muscle Growth</h3>
+      <p>Practical macro strategies for building lean mass while minimizing fat gain. Includes meal planning frameworks, supplementation guides, and timing protocols for optimal results.</p>
+      <span class="ebook-badge">Free</span>
+      <button class="ebook-btn">Download</button>
+    </div>
+
+    <div class="ebook-card">
+      <h3>Competition Prep Handbook</h3>
+      <p>A complete guide to preparing for your first bodybuilding show. Covers periodisation strategies, peak week protocols, posing practice, and managing the mental side of competition.</p>
+      <span class="ebook-badge coming-soon">Coming Soon</span>
+      <button class="ebook-btn secondary">Notify Me</button>
+    </div>
+
+    <div class="ebook-card">
+      <h3>Metabolic Reset</h3>
+      <p>Fix a broken metabolism with a science-backed protocol. Learn how metabolic adaptation occurs, how to increase your TDEE safely, and strategies to avoid metabolic damage during weight loss.</p>
+      <span class="ebook-badge coming-soon">Coming Soon</span>
+      <button class="ebook-btn secondary">Notify Me</button>
+    </div>
+
+    <div class="ebook-card">
+      <h3>Bone Health & Longevity</h3>
+      <p>Train for long-term bone density and durability beyond aesthetics. Discover how resistance training impacts skeletal health, practical loading strategies, and nutrition for optimal bone remodelling.</p>
+      <span class="ebook-badge">Free</span>
+      <button class="ebook-btn">Download</button>
+    </div>
+  </div>
+
+  <div class="note-section">
+    <p>New resources are released regularly. Follow us on Instagram <strong>@xgym_castlehill</strong> and join our email list to be notified of new guides and exclusive coaching content.</p>
+  </div>
+
+  <div class="cta-section">
+    <h3>Stay Updated</h3>
+    <p style="font-size: 1.05rem; color: rgba(245, 242, 236, 0.8); margin-bottom: 2rem;">Join our email list to receive new resources, training tips, and exclusive offers.</p>
+    <a href="mailto:admin@xgym.com.au?subject=Join%20Email%20List">Join The Email List</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-content">
+    <div class="footer-section">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;color:#f5f2ec;letter-spacing:0.08em;margin-bottom:14px;"><span style="color:#c9a84c;">X</span>GYM</div>
+      <p>Castle Hill's dedicated strength and performance facility.</p>
+    </div>
+    <div class="footer-section">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="testing.html">Testing</a></li>
+        <li><a href="library.html">Training Library</a></li>
+        <li><a href="team.html">Team</a></li>
+        <li><a href="coaching.html">Coaching</a></li>
+        <li><a href="memberships.html">Memberships</a></li>
+      </ul>
+    </div>
+    <div class="footer-section">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="tel:0424023601">📞 0424 023 601</a></li>
+        <li><a href="mailto:admin@xgym.com.au">✉ admin@xgym.com.au</a></li>
+        <li><span style="color:#aaa;">📍 Castle Hill, NSW</span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>XGYM © 2026. All Rights Reserved.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var btn=document.getElementById('nav-hamburger');
+  var links=document.getElementById('nav-links');
+  if(btn&&links){btn.addEventListener('click',function(){btn.classList.toggle('open');links.classList.toggle('open');});}
+})();
+</script>
+
+</body>
+</html>

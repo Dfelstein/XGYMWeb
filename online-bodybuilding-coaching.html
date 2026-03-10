@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>XGYM — Online Bodybuilding Coaching</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&family=Barlow+Condensed:wght@700;900&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230a0a0a'/%3E%3Ctext y='.9em' font-size='80' x='10' fill='%23c9a84c' font-family='Arial Black,sans-serif' font-weight='900'%3EX%3C/text%3E%3C/svg%3E">
+  <style>
+    :root {
+      --black: #0a0a0a;
+      --white: #f5f2ec;
+      --gold: #c9a84c;
+      --gold-light: #e8c96a;
+      --mid: #141414;
+      --grey: #888;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      background: var(--black); 
+      color: var(--white); 
+      font-family: 'Barlow', sans-serif; 
+      font-weight: 300;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    nav { 
+      position: sticky; 
+      top: 0; 
+      z-index: 100; 
+      display: flex; 
+      align-items: center; 
+      justify-content: space-between; 
+      padding: 1.2rem 3rem; 
+      background: rgba(10, 10, 10, 0.97); 
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07); 
+      backdrop-filter: blur(10px); 
+    }
+    .nav-logo { 
+      font-family: 'Bebas Neue', sans-serif; 
+      font-size: 1.8rem; 
+      letter-spacing: 0.15em; 
+      color: var(--white); 
+      text-decoration: none; 
+      flex-shrink: 0; 
+    }
+    .nav-logo span { color: var(--gold); }
+    .nav-links { 
+      display: flex; 
+      align-items: center; 
+      gap: 2rem; 
+      list-style: none; 
+    }
+    .nav-link { 
+      font-size: 0.7rem; 
+      letter-spacing: 0.2em; 
+      text-transform: uppercase; 
+      color: var(--white); 
+      opacity: 0.45; 
+      text-decoration: none; 
+      transition: opacity 0.2s, color 0.2s; 
+      white-space: nowrap; 
+    }
+    .nav-link:hover { opacity: 1; color: var(--gold); }
+    .nav-link.nav-active { opacity: 1; color: var(--gold); }
+    .nav-cta { 
+      background: var(--gold); 
+      color: var(--black); 
+      padding: 0.6rem 1.5rem; 
+      font-family: 'Barlow Condensed', sans-serif; 
+      font-size: 0.8rem; 
+      letter-spacing: 0.2em; 
+      text-transform: uppercase; 
+      font-weight: 700; 
+      text-decoration: none; 
+      transition: background 0.2s; 
+      opacity: 1 !important; 
+      white-space: nowrap; 
+    }
+    .nav-cta:hover { background: var(--gold-light); }
+    .nav-hamburger { 
+      display: none; 
+      flex-direction: column; 
+      gap: 5px; 
+      background: none; 
+      border: none; 
+      cursor: pointer; 
+      padding: 4px; 
+    }
+    .nav-hamburger span { 
+      display: block; 
+      width: 22px; 
+      height: 2px; 
+      background: var(--white); 
+      transition: transform 0.25s, opacity 0.25s; 
+    }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    @media(max-width: 860px) {
+      nav { padding: 1rem 1.5rem; position: relative; }
+      .nav-hamburger { display: flex; }
+      .nav-links { 
+        display: none; 
+        flex-direction: column; 
+        align-items: flex-start; 
+        gap: 0; 
+        position: absolute; 
+        top: 100%; 
+        left: 0; 
+        right: 0; 
+        background: rgba(10, 10, 10, 0.99); 
+        border-bottom: 1px solid rgba(255, 255, 255, 0.07); 
+        padding: 0.5rem 0 1rem; 
+      }
+      .nav-links.open { display: flex; }
+      .nav-links li { width: 100%; }
+      .nav-link { display: block; padding: 0.75rem 1.5rem; width: 100%; }
+      .nav-cta { margin: 0.5rem 1.5rem; display: inline-block; width: auto; }
+    }
+    .hero {
+      position: relative; overflow: hidden;
+      height: 45vh; min-height: 360px;
+      
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 3rem;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background-image: url('images/p1-50.jpg');
+      background-size: cover; background-position: center;
+      filter: brightness(0.4) contrast(1.1);
+    }
+    .hero-content h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.5rem, 8vw, 5rem);
+      letter-spacing: 0.08em;
+      margin-bottom: 1rem;
+      line-height: 1.1;
+      color: var(--white);
+    }
+    .hero-content p {
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
+      color: var(--gold);
+      letter-spacing: 0.05em;
+      font-weight: 300;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .section {
+      padding: 8rem 3rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .section-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      position: relative;
+      padding-left: 40px;
+    }
+    .section-label::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      width: 30px;
+      height: 1px;
+      background: var(--gold);
+    }
+    .section h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      letter-spacing: 0.06em;
+      margin-bottom: 3rem;
+      text-transform: uppercase;
+      line-height: 1.1;
+    }
+    .intro-text {
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: #d0d0d0;
+      margin-bottom: 3rem;
+      max-width: 900px;
+    }
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+    .feature-card {
+      background: var(--mid);
+      padding: 2.5rem;
+      border: 1px solid rgba(201, 168, 76, 0.2);
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+    .feature-card:hover {
+      border-color: var(--gold);
+      background: rgba(201, 168, 76, 0.05);
+      transform: translateY(-4px);
+    }
+    .feature-card h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.2rem;
+      letter-spacing: 0.08em;
+      color: var(--gold);
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+    }
+    .feature-card p {
+      font-size: 0.9rem;
+      color: #b0b0b0;
+      line-height: 1.7;
+    }
+    .philosophy-box {
+      background: rgba(201, 168, 76, 0.08);
+      border: 1px solid rgba(201, 168, 76, 0.2);
+      padding: 3rem;
+      margin-bottom: 3rem;
+      border-radius: 2px;
+    }
+    .philosophy-box h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem;
+      letter-spacing: 0.08em;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+    }
+    .philosophy-box p {
+      font-size: 0.95rem;
+      color: #b0b0b0;
+      line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+    .philosophy-box strong {
+      color: var(--gold);
+      font-weight: 600;
+    }
+    .divisions-grid {
+      background: var(--mid);
+      padding: 2.5rem;
+      margin-bottom: 3rem;
+      border-left: 4px solid var(--gold);
+    }
+    .divisions-grid h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem;
+      letter-spacing: 0.08em;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+    }
+    .divisions-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+    }
+    .division-item {
+      font-size: 0.95rem;
+      color: #c0c0c0;
+      padding: 1rem;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 2px;
+    }
+    .division-item::before {
+      content: '▸ ';
+      color: var(--gold);
+      font-weight: 600;
+      margin-right: 0.5rem;
+    }
+    .process-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+    .step {
+      background: var(--mid);
+      padding: 2.5rem;
+      border: 1px solid rgba(201, 168, 76, 0.2);
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+    .step:hover {
+      border-color: var(--gold);
+      background: rgba(201, 168, 76, 0.05);
+    }
+    .step-number {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem;
+      color: var(--gold);
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.1em;
+    }
+    .step h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.2rem;
+      letter-spacing: 0.08em;
+      color: var(--white);
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+    }
+    .step p {
+      font-size: 0.9rem;
+      color: #a0a0a0;
+      line-height: 1.6;
+    }
+    .cta-section {
+      background: linear-gradient(135deg, var(--mid) 0%, rgba(25, 25, 25, 0.6) 100%);
+      padding: 4rem 3rem;
+      text-align: center;
+      border: 1px solid rgba(201, 168, 76, 0.2);
+    }
+    .cta-section h2 {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    .cta-section p {
+      font-size: 1rem;
+      color: #a0a0a0;
+      margin-bottom: 2rem;
+    }
+    .btn {
+      background: var(--gold);
+      color: var(--black);
+      padding: 1rem 2.5rem;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
+    }
+    .btn:hover {
+      background: var(--gold-light);
+    }
+    footer {
+      background: #0a0a0a;
+      border-top: 1px solid #1e1e1e;
+      padding: 56px 20px 32px;
+      font-family: 'Barlow', sans-serif;
+    }
+    footer > div {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 48px;
+    }
+    .footer-col {
+      line-height: 1.7;
+    }
+    .footer-col > div:first-child {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      color: #f5f2ec;
+      letter-spacing: 0.08em;
+      margin-bottom: 14px;
+    }
+    .footer-col > div:first-child span {
+      color: #c9a84c;
+    }
+    .footer-col > p {
+      color: #888;
+      font-size: 0.88rem;
+      margin: 0;
+    }
+    .footer-col h4 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #c9a84c;
+      margin-bottom: 16px;
+    }
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .footer-col a {
+      color: #aaa;
+      text-decoration: none;
+      font-size: 0.88rem;
+    }
+    .footer-col a:hover {
+      color: #c9a84c;
+    }
+    .footer-bottom {
+      border-top: 1px solid #1e1e1e;
+      padding-top: 24px;
+      text-align: center;
+    }
+    .footer-bottom p {
+      color: #555;
+      font-size: 0.8rem;
+      margin: 0;
+      letter-spacing: 0.04em;
+    }
+    @media(max-width: 768px) {
+      .section { padding: 4rem 1.5rem; }
+      .footer-grid { grid-template-columns: 1fr; gap: 30px; }
+      .hero {
+      position: relative; overflow: hidden; height: auto; padding: 4rem 2rem; }
+      .divisions-list { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="nav-logo"><span>X</span>GYM</a>
+    <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html" class="nav-link">Home</a></li>
+      <li><a href="testing.html" class="nav-link">Testing</a></li>
+      <li><a href="library.html" class="nav-link">Training Library</a></li>
+      <li><a href="team.html" class="nav-link">Team</a></li>
+      <li><a href="coaching.html" class="nav-link">Coaching</a></li>
+      <li><a href="memberships.html" class="nav-link">Memberships</a></li>
+      <li><a href="contact.html" class="nav-link">Contact</a></li><li><a href="contact.html" class="nav-cta">Book Now</a></li>
+    </ul>
+  </nav>
+
+  <div class="hero">
+    <div class="hero-bg"></div>
+    <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(10,10,10,0.85));z-index:11;"></div>
+    <div class="hero-content" style="position:relative;z-index:20;">
+      <h1>Build Your Best Physique. Anywhere.</h1>
+      <p>Elite online bodybuilding coaching for physique athletes. Training, nutrition, and competition prep delivered by coaches who understand the sport.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Online Coaching</div>
+    <h2>What Is Online Coaching?</h2>
+    
+    <p class="intro-text">
+      XGYM's online coaching program delivers fully customised bodybuilding and physique programming to athletes worldwide. Whether you're competing at the amateur or professional level, preparing for your first show, or building your physique for personal satisfaction, our coaches provide expert guidance across training, nutrition, posing, and competition strategy.
+    </p>
+    
+    <p class="intro-text">
+      You maintain complete flexibility while receiving the programming precision and accountability of working with a dedicated elite coach. Adjustments are made based on your progress, feedback, and real-time updates, ensuring your program evolves with your physique and goals.
+    </p>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Your Program</div>
+    <h2>What You Get With Online Coaching</h2>
+    
+    <div class="feature-grid">
+      <div class="feature-card">
+        <h3>Custom Training Program</h3>
+        <p>Fully personalised training splits, rep ranges, exercise selection, and progression schemes designed specifically for your goals and current conditioning.</p>
+      </div>
+      <div class="feature-card">
+        <h3>Weekly Check-ins</h3>
+        <p>Direct communication with your coach every week. Discuss progress, ask questions, and receive adjustments in real-time based on how you're responding.</p>
+      </div>
+      <div class="feature-card">
+        <h3>Nutrition & Macro Planning</h3>
+        <p>Detailed macro targets for each phase of your prep—off-season building, cutting, and peak week. We adjust calories and macros based on your progress and metabolic response.</p>
+      </div>
+      <div class="feature-card">
+        <h3>Posing Coaching</h3>
+        <p>For competitors, we provide detailed posing guidance and critique. You'll learn mandatory poses, transitions, and how to present your physique optimally on stage.</p>
+      </div>
+      <div class="feature-card">
+        <h3>Progress Photo Reviews</h3>
+        <p>Submit regular progress photos for coaching feedback. We assess conditioning, proportion, and development to guide your training and nutrition adjustments.</p>
+      </div>
+      <div class="feature-card">
+        <h3>Competition Prep Support</h3>
+        <p>Complete competition preparation including peak week carb loading, water management, tanning preparation, and stage-day strategy for your show.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="philosophy-box">
+      <h3>Our Coaching Philosophy</h3>
+      <p>We believe in <strong>periodised training and nutrition</strong> that respects your body's need for progressive challenge and strategic recovery. Off-season phases focus on muscle building with controlled calorie surpluses and heavy strength work. Training becomes more volume-intensive as we transition into conditioning phases, with nutrition adjusted to preserve muscle while dropping body fat strategically.</p>
+      <p><strong>Peak week preparation</strong> is approached with precision. We use evidence-based carbohydrate loading, controlled sodium depletion, and hydration strategies to maximise fullness and hardness on stage. This isn't generic cookie-cutter prep—it's customised to your body, your history, and your individual response patterns.</p>
+      <p><strong>Long-term development</strong> is our priority. We're not chasing one show. We build sustainable systems that allow you to compete repeatedly, improve year after year, and maintain your health throughout the process.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="divisions-grid">
+      <h3>Who We Coach</h3>
+      <p style="font-size: 0.95rem; color: #c0c0c0; margin-bottom: 1.5rem;">We work with competitors across all divisions and physique improvement clients:</p>
+      <div class="divisions-list">
+        <div class="division-item">Open Bodybuilding</div>
+        <div class="division-item">Classic Physique</div>
+        <div class="division-item">Men's Physique</div>
+        <div class="division-item">Bikini</div>
+        <div class="division-item">Wellness</div>
+        <div class="division-item">Figure</div>
+        <div class="division-item">Physique Goals</div>
+        <div class="division-item">Off-Season Building</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">How It Works</div>
+    <h2>Your Path To Elite Coaching</h2>
+    
+    <div class="process-steps">
+      <div class="step">
+        <div class="step-number">1</div>
+        <h3>Apply or Enquire</h3>
+        <p>Get in touch via email or our online application. Tell us about your background, current physique, goals, and timeline. We'll review and determine coaching fit.</p>
+      </div>
+      <div class="step">
+        <div class="step-number">2</div>
+        <h3>Discovery Call</h3>
+        <p>Connect with your assigned coach for an initial consultation. Discuss your training history, nutrition, goals, and expectations. We align on programming and set the foundation.</p>
+      </div>
+      <div class="step">
+        <div class="step-number">3</div>
+        <h3>Custom Program</h3>
+        <p>Receive your fully customised training and nutrition program. You'll have access to detailed coaching, check-ins, and adjustments throughout your journey.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="cta-section">
+      <h2>Ready to Take Your Physique Seriously?</h2>
+      <p>Apply for online coaching with an XGYM elite coach. Whether you're a competitor or building your best physique, we have a coaching program for you.</p>
+      <a href="https://xgym.com.au/online-bodybuilding-coaching/" class="btn">Apply For Online Coaching</a>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div><span>X</span>GYM</div>
+        <p>Castle Hill's dedicated strength and performance facility.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="testing.html">Testing</a></li>
+          <li><a href="library.html">Training Library</a></li>
+          <li><a href="team.html">Team</a></li>
+          <li><a href="coaching.html">Coaching</a></li>
+          <li><a href="memberships.html">Memberships</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="tel:0424023601">📞 0424 023 601</a></li>
+          <li><a href="mailto:admin@xgym.com.au">✉ admin@xgym.com.au</a></li>
+          <li><span style="color: #aaa; font-size: 0.88rem;">📍 Castle Hill, NSW</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>XGYM © 2026. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    (function(){
+      var btn = document.getElementById('nav-hamburger');
+      var links = document.getElementById('nav-links');
+      if(btn && links) {
+        btn.addEventListener('click', function(){
+          btn.classList.toggle('open');
+          links.classList.toggle('open');
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>XGYM — DEXA Scan Body Composition</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230a0a0a'/%3E%3Ctext y='.9em' font-size='80' x='10' fill='%23c9a84c' font-family='Arial Black,sans-serif' font-weight='900'%3EX%3C/text%3E%3C/svg%3E">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&family=Barlow+Condensed:wght@700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --black: #0a0a0a;
+      --white: #f5f2ec;
+      --gold: #c9a84c;
+      --gold-light: #e8c96a;
+      --mid: #141414;
+      --grey: #888;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    html, body {
+      font-family: 'Barlow', sans-serif;
+      background: var(--black);
+      color: var(--white);
+      line-height: 1.6;
+    }
+    
+    nav { position:sticky; top:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:1.2rem 3rem; background:rgba(10,10,10,0.97); border-bottom:1px solid rgba(255,255,255,0.07); backdrop-filter:blur(10px); }
+    .nav-logo { font-family:'Bebas Neue',sans-serif; font-size:1.8rem; letter-spacing:0.15em; color:var(--white); text-decoration:none; flex-shrink:0; }
+    .nav-logo span { color:var(--gold); }
+    .nav-links { display:flex; align-items:center; gap:2rem; list-style:none; }
+    .nav-link { font-size:0.7rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--white); opacity:0.45; text-decoration:none; transition:opacity 0.2s,color 0.2s; white-space:nowrap; }
+    .nav-link:hover { opacity:1; color:var(--gold); }
+    .nav-link.nav-active { opacity:1; color:var(--gold); }
+    .nav-cta { background:var(--gold); color:var(--black); padding:0.6rem 1.5rem; font-family:'Barlow Condensed',sans-serif; font-size:0.8rem; letter-spacing:0.2em; text-transform:uppercase; font-weight:700; text-decoration:none; transition:background 0.2s; opacity:1!important; white-space:nowrap; }
+    .nav-cta:hover { background:var(--gold-light); }
+    .nav-hamburger { display:none; flex-direction:column; gap:5px; background:none; border:none; cursor:pointer; padding:4px; }
+    .nav-hamburger span { display:block; width:22px; height:2px; background:var(--white); transition:transform 0.25s,opacity 0.25s; }
+    .nav-hamburger.open span:nth-child(1) { transform:translateY(7px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity:0; }
+    .nav-hamburger.open span:nth-child(3) { transform:translateY(-7px) rotate(-45deg); }
+    @media(max-width:860px) { nav{padding:1rem 1.5rem;position:relative;} .nav-hamburger{display:flex;} .nav-links{display:none;flex-direction:column;align-items:flex-start;gap:0;position:absolute;top:100%;left:0;right:0;background:rgba(10,10,10,0.99);border-bottom:1px solid rgba(255,255,255,0.07);padding:0.5rem 0 1rem;} .nav-links.open{display:flex;} .nav-links li{width:100%;} .nav-link{display:block;padding:0.75rem 1.5rem;width:100%;} .nav-cta{margin:0.5rem 1.5rem;display:inline-block;width:auto;} }
+    
+    .hero {
+      height: 45vh; min-height: 360px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      
+      padding: 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .hero-bg {
+      position: absolute; inset: 0;
+      background-image: url('images/team-01.jpg');
+      background-size: cover; background-position: center;
+      filter: brightness(0.4) contrast(1.1);
+    }
+    .hero-content {
+      position: relative;
+      z-index: 20;
+      max-width: 900px;
+    }
+    
+    .hero h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 4.5rem;
+      letter-spacing: 0.08em;
+      margin-bottom: 1.5rem;
+      line-height: 1.1;
+    }
+    
+    .hero p {
+      font-size: 1.2rem;
+      color: #aaa;
+      margin-bottom: 0;
+      font-weight: 300;
+      letter-spacing: 0.02em;
+    }
+    
+    section {
+      padding: 8rem 3rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 900;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    
+    .section-label::before {
+      content: '';
+      display: block;
+      width: 30px;
+      height: 2px;
+      background: var(--gold);
+    }
+    
+    h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem;
+      letter-spacing: 0.08em;
+      margin-bottom: 3rem;
+      line-height: 1.1;
+    }
+    
+    .two-column {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+    
+    .two-column h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      letter-spacing: 0.06em;
+      margin-bottom: 1.5rem;
+      color: var(--white);
+    }
+    
+    .two-column p {
+      color: #aaa;
+      font-size: 0.95rem;
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+      font-weight: 300;
+    }
+    
+    .benefits-list {
+      list-style: none;
+      margin-top: 2rem;
+    }
+    
+    .benefits-list li {
+      padding: 1rem 0;
+      padding-left: 2rem;
+      color: #bbb;
+      position: relative;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+    
+    .benefits-list li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 8px;
+      height: 8px;
+      background: var(--gold);
+      border-radius: 50%;
+    }
+    
+    .stat-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+    
+    .stat-card {
+      background: var(--mid);
+      padding: 2rem;
+      border: 1px solid rgba(201, 168, 76, 0.2);
+      text-align: center;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+    }
+    
+    .stat-card:hover {
+      border-color: var(--gold);
+      background: rgba(20, 20, 20, 0.8);
+    }
+    
+    .stat-card .number {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.5rem;
+      color: var(--gold);
+      letter-spacing: 0.06em;
+      margin-bottom: 0.5rem;
+    }
+    
+    .stat-card .label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #aaa;
+    }
+    
+    .process-section {
+      background: var(--mid);
+      padding: 4rem;
+      border-radius: 4px;
+      border: 1px solid rgba(201, 168, 76, 0.1);
+    }
+    
+    .process-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 2rem;
+      margin-top: 2.5rem;
+    }
+    
+    .process-step {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    .process-step-number {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.5rem;
+      color: var(--gold);
+      opacity: 0.4;
+    }
+    
+    .process-step h4 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.06em;
+    }
+    
+    .process-step p {
+      color: #aaa;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      font-weight: 300;
+    }
+    
+    .who-benefits {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+    
+    .benefit-box {
+      background: rgba(201, 168, 76, 0.05);
+      padding: 2rem;
+      border-left: 3px solid var(--gold);
+      border-radius: 2px;
+    }
+    
+    .benefit-box h4 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.2rem;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.5rem;
+      color: var(--gold);
+    }
+    
+    .benefit-box p {
+      color: #aaa;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      font-weight: 300;
+      margin: 0;
+    }
+    
+    .cta-section {
+      background: linear-gradient(135deg, #111 0%, #1a1a1a 100%);
+      padding: 6rem 3rem;
+      text-align: center;
+      border-top: 1px solid rgba(201, 168, 76, 0.2);
+      border-bottom: 1px solid rgba(201, 168, 76, 0.2);
+      margin: 4rem 0;
+    }
+    
+    .cta-section h2 {
+      font-size: 2.8rem;
+      margin-bottom: 1rem;
+    }
+    
+    .btn {
+      background: var(--gold);
+      color: var(--black);
+      padding: 0.9rem 2.5rem;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.9rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+      border-radius: 2px;
+    }
+    
+    .btn:hover {
+      background: var(--gold-light);
+      transform: translateY(-2px);
+    }
+    
+    footer {
+      background: #0a0a0a;
+      border-top: 1px solid #1e1e1e;
+      padding: 56px 20px 32px;
+      font-family: 'Barlow', sans-serif;
+    }
+    
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+      
+      .hero p {
+        font-size: 1rem;
+      }
+      
+      h2 {
+        font-size: 2rem;
+      }
+      
+      .two-column {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      
+      section {
+        padding: 4rem 1.5rem;
+      }
+      
+      .process-section {
+        padding: 2rem;
+      }
+      
+      .cta-section {
+        padding: 3rem 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo"><span>X</span>GYM</a>
+  <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="index.html" class="nav-link">Home</a></li>
+    <li><a href="testing.html" class="nav-link">Testing</a></li>
+    <li><a href="library.html" class="nav-link">Training Library</a></li>
+    <li><a href="team.html" class="nav-link">Team</a></li>
+    <li><a href="coaching.html" class="nav-link">Coaching</a></li>
+    <li><a href="memberships.html" class="nav-link">Memberships</a></li>
+    <li><a href="contact.html" class="nav-link">Contact</a></li><li><a href="contact.html" class="nav-cta">Book Now</a></li>
+  </ul>
+</nav>
+
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(10,10,10,0.85));z-index:11;"></div>
+  <div class="hero-content" style="position:relative;z-index:20;">
+    <h1>KNOW YOUR BODY. CHANGE YOUR BODY.</h1>
+    <p>DEXA is the gold standard in body composition analysis. Precision data for serious athletes.</p>
+  </div>
+</div>
+
+<section>
+  <div class="section-label">What Is DEXA</div>
+  <div class="two-column">
+    <div>
+      <h3>Dual-Energy X-ray Absorptiometry</h3>
+      <p>DEXA (Dual-Energy X-ray Absorptiometry) is a medical-grade imaging technology that provides the most accurate body composition analysis available. Unlike scales, bioelectrical impedance, or visual estimation, DEXA uses low-dose X-ray technology to precisely distinguish between lean muscle mass, body fat, and bone mineral density with accuracy margins of ±1-2%.</p>
+      <p>Originally developed for bone density assessment in medical settings, DEXA has become the gold standard for body composition measurement in research, athletics, and performance training. It provides regional breakdown of your body composition, allowing you to track muscle gain and fat loss with scientific precision.</p>
+      <p>At XGYM, we use DEXA scanning as a cornerstone of our performance testing suite. Whether you're tracking muscle gain, monitoring fat loss, preparing for competition, or simply curious about your body composition, DEXA gives you the data you need to make informed decisions about your training and nutrition.</p>
+    </div>
+    <div>
+      <h3>What You Receive</h3>
+      <ul class="benefits-list">
+        <li><strong>Regional Body Fat %:</strong> Total body fat percentage plus breakdown by body region (arms, legs, torso, trunk)</li>
+        <li><strong>Lean Muscle Mass by Segment:</strong> Exact kilograms of lean mass in each region, showing strength development asymmetries</li>
+        <li><strong>Bone Mineral Density:</strong> T-score and Z-score measurements for bone health assessment</li>
+        <li><strong>Visceral Fat Estimate:</strong> Measurement of deep abdominal fat linked to metabolic health</li>
+        <li><strong>Android/Gynoid Fat Ratio:</strong> Fat distribution pattern assessment relevant to health markers</li>
+        <li><strong>Detailed PDF Report:</strong> Professional report with all measurements, graphs, and baseline reference data</li>
+        <li><strong>Coach Debrief:</strong> 20-minute consultation to discuss results and plan next steps</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="section-label">Why DEXA</div>
+  <h2>The Gold Standard in Body Composition</h2>
+  <div class="stat-cards">
+    <div class="stat-card">
+      <div class="number">±1-2%</div>
+      <div class="label">Accuracy</div>
+    </div>
+    <div class="stat-card">
+      <div class="number">10 min</div>
+      <div class="label">Scan Time</div>
+    </div>
+    <div class="stat-card">
+      <div class="number">Medical</div>
+      <div class="label">Grade</div>
+    </div>
+    <div class="stat-card">
+      <div class="number">Full Body</div>
+      <div class="label">Regional Data</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="section-label">What To Expect</div>
+  <div class="process-section">
+    <h2>Your DEXA Scan Experience</h2>
+    <div class="process-steps">
+      <div class="process-step">
+        <div class="process-step-number">01</div>
+        <h4>Book Online</h4>
+        <p>Select your preferred date and time through our online booking system. You'll receive confirmation and pre-scan instructions.</p>
+      </div>
+      <div class="process-step">
+        <div class="process-step-number">02</div>
+        <h4>Arrive at XGYM</h4>
+        <p>Come to our Castle Hill facility 10 minutes early. We'll check you in, remove any metal items, and brief you on the scan.</p>
+      </div>
+      <div class="process-step">
+        <div class="process-step-number">03</div>
+        <h4>10-Minute Scan</h4>
+        <p>Lie comfortably on the scanning bed as the DEXA machine passes over your body. It's painless, non-invasive, and quick.</p>
+      </div>
+      <div class="process-step">
+        <div class="process-step-number">04</div>
+        <h4>Review Results</h4>
+        <p>Your scan generates detailed data immediately. One of our coaches will walk you through your results within 24 hours.</p>
+      </div>
+      <div class="process-step">
+        <div class="process-step-number">05</div>
+        <h4>Coach Debrief</h4>
+        <p>Meet with your coach to discuss what your numbers mean and how to use them to refine your training and nutrition strategy.</p>
+      </div>
+      <div class="process-step">
+        <div class="process-step-number">06</div>
+        <h4>Track Progress</h4>
+        <p>Schedule follow-up scans (recommended every 8-12 weeks) to track changes in lean mass and body fat with scientific precision.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="section-label">Who Needs DEXA</div>
+  <h2>The Ideal Candidate</h2>
+  <div class="who-benefits">
+    <div class="benefit-box">
+      <h4>Strength Athletes</h4>
+      <p>Track muscle gain and ensure your training is building lean mass effectively. Regional data shows if you're developing evenly.</p>
+    </div>
+    <div class="benefit-box">
+      <h4>Fat Loss Phase</h4>
+      <p>Verify you're losing fat, not muscle. Many people on calorie deficits lose muscle tissue—DEXA shows exactly what's happening.</p>
+    </div>
+    <div class="benefit-box">
+      <h4>Bone Health Monitoring</h4>
+      <p>Track bone mineral density over time. Athletes, especially females, should monitor bone health to prevent osteoporosis.</p>
+    </div>
+    <div class="benefit-box">
+      <h4>Competition Prep</h4>
+      <p>Athletes in sports with weight classes or body composition standards use DEXA to optimize their physical preparation.</p>
+    </div>
+    <div class="benefit-box">
+      <h4>Health Baseline</h4>
+      <p>Anyone over 35 wanting a health baseline should establish body composition and bone density metrics as reference points.</p>
+    </div>
+    <div class="benefit-box">
+      <h4>Fitness Enthusiasts</h4>
+      <p>If you've hit a plateau and want to understand whether your training is working, DEXA provides the evidence you need.</p>
+    </div>
+  </div>
+</section>
+
+
+<section style="padding: 0; max-width: 100%; overflow: hidden;">
+  <video autoplay muted loop playsinline style="width:100%;height:420px;object-fit:cover;display:block;">
+    <source src="videos/dexa-landscape.mov" type="video/mp4">
+  </video>
+</section>
+
+<div class="cta-section">
+  <h2>Book Your DEXA Scan</h2>
+  <p>Get the most accurate body composition data available. No guessing. No estimation. Just science.</p>
+  <a href="https://xgym.com.au/dexa-scan/#book-now" class="btn">Book Now</a>
+</div>
+
+<footer style="background:#0a0a0a;border-top:1px solid #1e1e1e;padding:56px 20px 32px;font-family:'Barlow',sans-serif;">
+  <div style="max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr 1fr;gap:40px;margin-bottom:48px;">
+    <div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;color:#f5f2ec;letter-spacing:0.08em;margin-bottom:14px;"><span style="color:#c9a84c;">X</span>GYM</div>
+      <p style="color:#888;font-size:0.88rem;line-height:1.7;margin:0;">Castle Hill's dedicated strength and performance facility.</p>
+    </div>
+    <div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.78rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#c9a84c;margin-bottom:16px;">Quick Links</div>
+      <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;">
+        <li><a href="index.html" style="color:#aaa;text-decoration:none;font-size:0.88rem;">Home</a></li>
+        <li><a href="testing.html" style="color:#aaa;text-decoration:none;font-size:0.88rem;">Testing</a></li>
+        <li><a href="library.html" style="color:#aaa;text-decoration:none;font-size:0.88rem;">Training Library</a></li>
+        <li><a href="team.html" style="color:#aaa;text-decoration:none;font-size:0.88rem;">Team</a></li>
+        <li><a href="coaching.html" style="color:#aaa;text-decoration:none;font-size:0.88rem;">Coaching</a></li>
+        <li><a href="memberships.html" style="color:#aaa;text-decoration:none;font-size:0.88rem;">Memberships</a></li>
+      </ul>
+    </div>
+    <div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.78rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#c9a84c;margin-bottom:16px;">Contact</div>
+      <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;">
+        <li><a href="tel:0424023601" style="color:#aaa;text-decoration:none;font-size:0.88rem;">📞 0424 023 601</a></li>
+        <li><a href="mailto:admin@xgym.com.au" style="color:#aaa;text-decoration:none;font-size:0.88rem;">✉ admin@xgym.com.au</a></li>
+        <li><span style="color:#aaa;font-size:0.88rem;">📍 Castle Hill, NSW</span></li>
+      </ul>
+    </div>
+  </div>
+  <div style="max-width:1100px;margin:0 auto;border-top:1px solid #1e1e1e;padding-top:24px;text-align:center;">
+    <p style="color:#555;font-size:0.8rem;margin:0;letter-spacing:0.04em;">XGYM © 2026. All Rights Reserved.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var btn=document.getElementById('nav-hamburger');
+  var links=document.getElementById('nav-links');
+  if(btn&&links){btn.addEventListener('click',function(){btn.classList.toggle('open');links.classList.toggle('open');});}
+})();
+</script>
+
+</body>
+</html>

@@ -224,6 +224,14 @@ footer { border-top: 1px solid var(--border); padding: 2.5rem 3rem; display: fle
 </head>
 <body>
 
+<!-- Contact Bar -->
+<div class="contact-bar" style="background: #111; border-bottom: 1px solid #222; padding: 8px 20px; display: flex; align-items: center; justify-content: space-between; font-family: 'Barlow', sans-serif; font-size: 0.82rem; letter-spacing: 0.04em; position: relative; z-index: 200;">
+  <a href="tel:0424023601" style="color: #c9a84c; text-decoration: none; display: flex; align-items: center; gap: 8px;">
+    <span>📞</span><span>0424 023 601</span>
+  </a>
+  <a href="https://xgym.com.au/2-week-trial/" target="_blank" rel="noopener" style="background: transparent; border: 1px solid #c9a84c; color: #c9a84c; padding: 5px 18px; text-decoration: none; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; transition: background 0.2s, color 0.2s;">Book a 2 Week Trial</a>
+</div>
+
 <!-- NAV -->
 <nav>
   <a href="index.html" class="nav-logo"><span>X</span>GYM</a>
@@ -237,7 +245,7 @@ footer { border-top: 1px solid var(--border); padding: 2.5rem 3rem; display: fle
     <li><a href="team.html" class="nav-link">Team</a></li>
     <li><a href="coaching.html" class="nav-link">Coaching</a></li>
     <li><a href="memberships.html" class="nav-link nav-active">Memberships</a></li>
-    <li><a href="https://digitalpresence.biz/xgym/dexa-scan/#form" target="_blank" class="nav-cta">Book Now</a></li>
+    <li><a href="contact.html" class="nav-link">Contact</a></li><li><a href="contact.html" class="nav-cta">Book Now</a></li>
   </ul>
 </nav>
 <script>
@@ -310,7 +318,7 @@ footer { border-top: 1px solid var(--border); padding: 2.5rem 3rem; display: fle
         <li>Personalised nutrition planning, tailored to your ongoing program</li>
         <li>Maximum flexibility</li>
       </ul>
-      <a href="https://digitalpresence.biz/xgym/memberships/" target="_blank" class="plan-cta">Enquire Now</a>
+      <a href="https://xgym.com.au/memberships/" target="_blank" class="plan-cta">Enquire Now</a>
     </div>
 
     <div class="plan">
@@ -325,7 +333,7 @@ footer { border-top: 1px solid var(--border); padding: 2.5rem 3rem; display: fle
         <li>Complimentary PT session</li>
         <li>Personalised nutrition planning, tailored to your ongoing program</li>
       </ul>
-      <a href="https://digitalpresence.biz/xgym/memberships/" target="_blank" class="plan-cta">Enquire Now</a>
+      <a href="https://xgym.com.au/memberships/" target="_blank" class="plan-cta">Enquire Now</a>
     </div>
 
     <div class="plan featured">
@@ -342,7 +350,7 @@ footer { border-top: 1px solid var(--border); padding: 2.5rem 3rem; display: fle
         <li>Personalised nutrition planning, tailored to your ongoing program</li>
         <li>Best value annual commitment</li>
       </ul>
-      <a href="https://digitalpresence.biz/xgym/memberships/" target="_blank" class="plan-cta">Enquire Now</a>
+      <a href="https://xgym.com.au/memberships/" target="_blank" class="plan-cta">Enquire Now</a>
     </div>
 
     <div class="plan">
@@ -358,7 +366,7 @@ footer { border-top: 1px solid var(--border); padding: 2.5rem 3rem; display: fle
         <li>Personalised nutrition planning, tailored to your ongoing program</li>
         <li>Lowest weekly rate available</li>
       </ul>
-      <a href="https://digitalpresence.biz/xgym/memberships/" target="_blank" class="plan-cta">Enquire Now</a>
+      <a href="https://xgym.com.au/memberships/" target="_blank" class="plan-cta">Enquire Now</a>
     </div>
 
   </div>
@@ -451,18 +459,48 @@ footer { border-top: 1px solid var(--border); padding: 2.5rem 3rem; display: fle
   <h2>Ready to Break All Limits?</h2>
   <p>Start with a 2 week trial or jump straight into a membership.</p>
   <a href="https://xgym.com.au/2-week-trial/" target="_blank" class="btn-black" style="margin-right:1rem;">Start 2 Week Trial</a>
-  <a href="https://digitalpresence.biz/xgym/memberships/" target="_blank" class="btn-gold" style="display:inline-block; color:var(--black);">View Memberships</a>
+  <a href="https://xgym.com.au/memberships/" target="_blank" class="btn-gold" style="display:inline-block; color:var(--black);">View Memberships</a>
 </div>
 
-<footer>
-  <div class="footer-logo"><span>X</span>GYM</div>
-  <div class="footer-links">
-    <a href="index.html" class="footer-link">Home</a>
-    <a href="testing.html" class="footer-link">Testing</a>
-    <a href="library.html" class="footer-link">Training Library</a>
-    <a href="mailto:admin@xgym.com.au" class="footer-link">admin@xgym.com.au</a>
+<!-- Footer -->
+<style>
+@media (max-width: 700px) {
+  .xgym-footer-grid { grid-template-columns: 1fr !important; }
+}
+</style>
+<footer style="background: #0a0a0a; border-top: 1px solid #1e1e1e; padding: 56px 20px 32px; font-family: 'Barlow', sans-serif;">
+  <div class="xgym-footer-grid" style="max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 40px; margin-bottom: 48px;">
+    <!-- Brand col -->
+    <div>
+      <div style="font-family: 'Bebas Neue', sans-serif; font-size: 2rem; color: #f5f2ec; letter-spacing: 0.08em; margin-bottom: 14px;"><span style="color: #c9a84c;">X</span>GYM</div>
+      <p style="color: #888; font-size: 0.88rem; line-height: 1.7; margin: 0;">Castle Hill's dedicated strength and performance facility.</p>
+    </div>
+    <!-- Quick links -->
+    <div>
+      <div style="font-family: 'Barlow Condensed', sans-serif; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #c9a84c; margin-bottom: 16px;">Quick Links</div>
+      <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px;">
+        <li><a href="index.html" style="color: #aaa; text-decoration: none; font-size: 0.88rem; letter-spacing: 0.03em; transition: color 0.2s;">Home</a></li>
+        <li><a href="testing.html" style="color: #aaa; text-decoration: none; font-size: 0.88rem; letter-spacing: 0.03em;">Testing</a></li>
+        <li><a href="library.html" style="color: #aaa; text-decoration: none; font-size: 0.88rem; letter-spacing: 0.03em;">Training Library</a></li>
+        <li><a href="team.html" style="color: #aaa; text-decoration: none; font-size: 0.88rem; letter-spacing: 0.03em;">Team</a></li>
+        <li><a href="coaching.html" style="color: #aaa; text-decoration: none; font-size: 0.88rem; letter-spacing: 0.03em;">Coaching</a></li>
+        <li><a href="memberships.html" style="color: #aaa; text-decoration: none; font-size: 0.88rem; letter-spacing: 0.03em;">Memberships</a></li>
+      </ul>
+    </div>
+    <!-- Contact -->
+    <div>
+      <div style="font-family: 'Barlow Condensed', sans-serif; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #c9a84c; margin-bottom: 16px;">Contact</div>
+      <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px;">
+        <li><a href="tel:0424023601" style="color: #aaa; text-decoration: none; font-size: 0.88rem;">📞 0424 023 601</a></li>
+        <li><a href="mailto:admin@xgym.com.au" style="color: #aaa; text-decoration: none; font-size: 0.88rem;">✉ admin@xgym.com.au</a></li>
+        <li><span style="color: #aaa; font-size: 0.88rem;">📍 Castle Hill, NSW</span></li>
+      </ul>
+    </div>
   </div>
-  <p class="footer-copy">© 2026 XGYM Castle Hill. All rights reserved.</p>
+  <!-- Copyright -->
+  <div style="max-width: 1100px; margin: 0 auto; border-top: 1px solid #1e1e1e; padding-top: 24px; text-align: center;">
+    <p style="color: #555; font-size: 0.8rem; margin: 0; letter-spacing: 0.04em;">XGYM © 2026. All Rights Reserved.</p>
+  </div>
 </footer>
 
 </body>

@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>XGYM — Blood Marker Testing</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230a0a0a'/%3E%3Ctext y='.9em' font-size='80' x='10' fill='%23c9a84c' font-family='Arial Black,sans-serif' font-weight='900'%3EX%3C/text%3E%3C/svg%3E">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&family=Barlow+Condensed:wght@700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --black: #0a0a0a;
+      --white: #f5f2ec;
+      --gold: #c9a84c;
+      --gold-light: #e8c96a;
+      --mid: #141414;
+      --grey: #888;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    html, body {
+      font-family: 'Barlow', sans-serif;
+      background: var(--black);
+      color: var(--white);
+      line-height: 1.6;
+    }
+    
+    nav { position:sticky; top:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:1.2rem 3rem; background:rgba(10,10,10,0.97); border-bottom:1px solid rgba(255,255,255,0.07); backdrop-filter:blur(10px); }
+    .nav-logo { font-family:'Bebas Neue',sans-serif; font-size:1.8rem; letter-spacing:0.15em; color:var(--white); text-decoration:none; flex-shrink:0; }
+    .nav-logo span { color:var(--gold); }
+    .nav-links { display:flex; align-items:center; gap:2rem; list-style:none; }
+    .nav-link { font-size:0.7rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--white); opacity:0.45; text-decoration:none; transition:opacity 0.2s,color 0.2s; white-space:nowrap; }
+    .nav-link:hover { opacity:1; color:var(--gold); }
+    .nav-link.nav-active { opacity:1; color:var(--gold); }
+    .nav-cta { background:var(--gold); color:var(--black); padding:0.6rem 1.5rem; font-family:'Barlow Condensed',sans-serif; font-size:0.8rem; letter-spacing:0.2em; text-transform:uppercase; font-weight:700; text-decoration:none; transition:background 0.2s; opacity:1!important; white-space:nowrap; }
+    .nav-cta:hover { background:var(--gold-light); }
+    .nav-hamburger { display:none; flex-direction:column; gap:5px; background:none; border:none; cursor:pointer; padding:4px; }
+    .nav-hamburger span { display:block; width:22px; height:2px; background:var(--white); transition:transform 0.25s,opacity 0.25s; }
+    .nav-hamburger.open span:nth-child(1) { transform:translateY(7px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity:0; }
+    .nav-hamburger.open span:nth-child(3) { transform:translateY(-7px) rotate(-45deg); }
+    @media(max-width:860px) { nav{padding:1rem 1.5rem;position:relative;} .nav-hamburger{display:flex;} .nav-links{display:none;flex-direction:column;align-items:flex-start;gap:0;position:absolute;top:100%;left:0;right:0;background:rgba(10,10,10,0.99);border-bottom:1px solid rgba(255,255,255,0.07);padding:0.5rem 0 1rem;} .nav-links.open{display:flex;} .nav-links li{width:100%;} .nav-link{display:block;padding:0.75rem 1.5rem;width:100%;} .nav-cta{margin:0.5rem 1.5rem;display:inline-block;width:auto;} }
+    
+    .hero {
+      height: 45vh; min-height: 360px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      
+      padding: 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .hero-bg {
+      position: absolute; inset: 0;
+      background-image: url('images/p1-05.jpg');
+      background-size: cover; background-position: center;
+      filter: brightness(0.4) contrast(1.1);
+    }
+    .hero-content {
+      position: relative;
+      z-index: 20;
+      max-width: 900px;
+    }
+    
+    .hero h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 4.5rem;
+      letter-spacing: 0.08em;
+      margin-bottom: 1.5rem;
+      line-height: 1.1;
+    }
+    
+    .hero p {
+      font-size: 1.2rem;
+      color: #aaa;
+      margin-bottom: 0;
+      font-weight: 300;
+      letter-spacing: 0.02em;
+    }
+    
+    section {
+      padding: 8rem 3rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 900;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    
+    .section-label::before {
+      content: '';
+      display: block;
+      width: 30px;
+      height: 2px;
+      background: var(--gold);
+    }
+    
+    h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem;
+      letter-spacing: 0.08em;
+      margin-bottom: 3rem;
+      line-height: 1.1;
+    }
+    
+    .markers-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+    
+    .marker-card {
+      background: var(--mid);
+      padding: 2rem;
+      border: 1px solid rgba(201, 168, 76, 0.15);
+      border-radius: 4px;
+      transition: all 0.3s ease;
+    }
+    
+    .marker-card:hover {
+      border-color: rgba(201, 168, 76, 0.5);
+      background: rgba(20, 20, 20, 0.8);
+      transform: translateY(-4px);
+    }
+    
+    .marker-card h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.2rem;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.8rem;
+      color: var(--gold);
+    }
+    
+    .marker-card p {
+      color: #aaa;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      font-weight: 300;
+      margin: 0;
+    }
+    
+    .why-section {
+      background: var(--mid);
+      padding: 3rem;
+      border-radius: 4px;
+      border: 1px solid rgba(201, 168, 76, 0.1);
+      margin-bottom: 2rem;
+    }
+    
+    .why-section p {
+      color: #aaa;
+      font-size: 0.95rem;
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+      font-weight: 300;
+    }
+    
+    .why-section p:last-child {
+      margin-bottom: 0;
+    }
+    
+    .process-flow {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+    
+    .process-item {
+      background: var(--mid);
+      padding: 2rem;
+      border: 1px solid rgba(201, 168, 76, 0.15);
+      border-radius: 4px;
+      text-align: center;
+    }
+    
+    .process-item h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.06em;
+      color: var(--gold);
+      margin-bottom: 0.8rem;
+    }
+    
+    .process-item p {
+      color: #aaa;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      font-weight: 300;
+      margin: 0;
+    }
+    
+    .should-test {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+    
+    .test-reason {
+      background: rgba(201, 168, 76, 0.05);
+      padding: 2rem;
+      border-left: 3px solid var(--gold);
+      border-radius: 2px;
+    }
+    
+    .test-reason h4 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.2rem;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.8rem;
+      color: var(--gold);
+    }
+    
+    .test-reason p {
+      color: #aaa;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      font-weight: 300;
+      margin: 0;
+    }
+    
+    .note-box {
+      background: rgba(201, 168, 76, 0.05);
+      border-left: 3px solid var(--gold);
+      padding: 2rem;
+      border-radius: 2px;
+      margin: 3rem 0;
+    }
+    
+    .note-box p {
+      color: #bbb;
+      font-size: 0.95rem;
+      line-height: 1.7;
+      margin: 0;
+      font-weight: 300;
+    }
+    
+    .cta-section {
+      background: linear-gradient(135deg, #111 0%, #1a1a1a 100%);
+      padding: 6rem 3rem;
+      text-align: center;
+      border-top: 1px solid rgba(201, 168, 76, 0.2);
+      border-bottom: 1px solid rgba(201, 168, 76, 0.2);
+      margin: 4rem 0;
+    }
+    
+    .cta-section h2 {
+      font-size: 2.8rem;
+      margin-bottom: 1rem;
+    }
+    
+    .btn {
+      background: var(--gold);
+      color: var(--black);
+      padding: 0.9rem 2.5rem;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.9rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+      border-radius: 2px;
+    }
+    
+    .btn:hover {
+      background: var(--gold-light);
+      transform: translateY(-2px);
+    }
+    
+    footer {
+      background: #0a0a0a;
+      border-top: 1px solid #1e1e1e;
+      padding: 56px 20px 32px;
+      font-family: 'Barlow', sans-serif;
+    }
+    
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+      
+      .hero p {
+        font-size: 1rem;
+      }
+      
+      h2 {
+        font-size: 2rem;
+      }
+      
+      section {
+        padding: 4rem 1.5rem;
+      }
+      
+      .cta-section {
+        padding: 3rem 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo"><span>X</span>GYM</a>
+  <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="index.html" class="nav-link">Home</a></li>
+    <li><a href="testing.html" class="nav-link">Testing</a></li>
+    <li><a href="library.html" class="nav-link">Training Library</a></li>
+    <li><a href="team.html" class="nav-link">Team</a></li>
+    <li><a href="coaching.html" class="nav-link">Coaching</a></li>
+    <li><a href="memberships.html" class="nav-link">Memberships</a></li>
+    <li><a href="contact.html" class="nav-link">Contact</a></li><li><a href="contact.html" class="nav-cta">Book Now</a></li>
+  </ul>
+</nav>
+
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(10,10,10,0.85));z-index:11;"></div>
+  <div class="hero-content" style="position:relative;z-index:20;">
+    <h1>YOUR BLOOD DOESN'T LIE</h1>
+    <p>Comprehensive blood panel testing for performance and health optimization</p>
+  </div>
+</div>
+
+<section>
+  <div class="section-label">What We Test</div>
+  <h2>Comprehensive Blood Marker Analysis</h2>
+  <div class="markers-grid">
+    <div class="marker-card">
+      <h3>Testosterone & Hormones</h3>
+      <p>Total and free testosterone, DHEA, cortisol levels. Critical for muscle growth, recovery, energy, and mood in both men and women.</p>
+    </div>
+    <div class="marker-card">
+      <h3>Thyroid Function</h3>
+      <p>TSH, Free T3, Free T4. Thyroid dysfunction sabotages metabolism, energy, and fat loss. Often overlooked in training populations.</p>
+    </div>
+    <div class="marker-card">
+      <h3>Iron & Ferritin</h3>
+      <p>Serum iron, ferritin, TIBC. Iron deficiency causes fatigue and poor performance. Athletes and menstruating individuals need regular monitoring.</p>
+    </div>
+    <div class="marker-card">
+      <h3>Vitamin D & B12</h3>
+      <p>25-hydroxy vitamin D, B12, folate. Deficiencies are epidemic and directly impact immune function, energy, and recovery from training.</p>
+    </div>
+    <div class="marker-card">
+      <h3>Inflammatory Markers</h3>
+      <p>C-reactive protein (CRP), homocysteine. Elevated inflammation indicates recovery issues, metabolic dysfunction, or underlying health problems.</p>
+    </div>
+    <div class="marker-card">
+      <h3>Lipid Panel</h3>
+      <p>Total cholesterol, LDL, HDL, triglycerides. Essential for cardiovascular health. Training and nutrition profoundly impact these markers.</p>
+    </div>
+    <div class="marker-card">
+      <h3>Blood Glucose & Insulin</h3>
+      <p>Fasting glucose, insulin, HbA1c. Reveals glucose control and insulin sensitivity—foundational markers for performance and longevity.</p>
+    </div>
+    <div class="marker-card">
+      <h3>Full Blood Count</h3>
+      <p>Hemoglobin, hematocrit, red/white blood cells, platelets. Detects anemia, infection risk, and overall blood health status.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="section-label">Why Blood Testing Matters</div>
+  <h2>Internal Health Determines External Results</h2>
+  <div class="why-section">
+    <p>Nutritional deficiencies, hormonal imbalances, and metabolic dysfunction operate silently. You might feel fine while your blood markers reveal serious issues sabotaging your training results and long-term health.</p>
+    <p>A low-iron athlete will never achieve peak performance. An athlete with vitamin D deficiency has compromised immune function and slower recovery. Elevated inflammation means your body is in a constant state of fighting itself rather than building muscle. Insulin resistance makes fat loss nearly impossible regardless of how strictly you diet.</p>
+    <p>These problems don't show up in how you feel. They show up in your blood. That's why serious athletes and anyone invested in their health get tested. Data-driven training begins with knowing your internal health status. XGYM partners with professional pathology providers to deliver comprehensive blood analysis, with results reviewed and interpreted by your coach to inform your training and nutrition strategy.</p>
+  </div>
+</section>
+
+<section>
+  <div class="section-label">The Process</div>
+  <h2>How Blood Testing Works</h2>
+  <div class="process-flow">
+    <div class="process-item">
+      <h3>Book</h3>
+      <p>Schedule your blood draw appointment. We'll provide pre-test fasting instructions and answer any questions.</p>
+    </div>
+    <div class="process-item">
+      <h3>Draw</h3>
+      <p>Visit our partner pathology clinic for a quick, professional blood draw. Takes about 5 minutes.</p>
+    </div>
+    <div class="process-item">
+      <h3>Results</h3>
+      <p>Receive comprehensive results within 5-7 business days. You'll get your values and reference ranges.</p>
+    </div>
+    <div class="process-item">
+      <h3>Debrief</h3>
+      <p>Meet with your XGYM coach to review results and discuss what they mean for your training and health.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="section-label">Who Should Test</div>
+  <h2>Blood Testing Is For You If</h2>
+  <div class="should-test">
+    <div class="test-reason">
+      <h4>Poor Recovery</h4>
+      <p>Constantly sore, fatigued, or getting sick easily? Blood markers reveal deficiencies and inflammatory issues preventing recovery.</p>
+    </div>
+    <div class="test-reason">
+      <h4>Low Energy or Mood</h4>
+      <p>Persistent fatigue or mood issues often stem from vitamin D, B12, iron, or thyroid problems that show up in blood work.</p>
+    </div>
+    <div class="test-reason">
+      <h4>Age 35+</h4>
+      <p>Hormonal shifts happen gradually. A baseline blood panel helps catch issues early and monitor hormone trends over time.</p>
+    </div>
+    <div class="test-reason">
+      <h4>Body Composition Journey</h4>
+      <p>Anyone on a serious fat loss or muscle gain mission should know their glucose, insulin, lipid, and hormone levels.</p>
+    </div>
+    <div class="test-reason">
+      <h4>Athletic Performance</h4>
+      <p>Competitive athletes benefit from knowing iron, vitamin D, testosterone, and inflammatory status for performance optimization.</p>
+    </div>
+    <div class="test-reason">
+      <h4>Family Health History</h4>
+      <p>If heart disease, diabetes, or other conditions run in your family, baseline blood work helps establish your personal health status.</p>
+    </div>
+  </div>
+</section>
+
+<div class="note-box">
+  <p><strong>Partnership with Professional Pathology:</strong> XGYM blood testing is completed through partnership with accredited pathology providers. We coordinate scheduling, result interpretation, and coaching consultation. Your results remain private and secure, shared only with you and your coach.</p>
+</div>
+
+<div class="cta-section">
+  <h2>Enquire About Blood Testing</h2>
+  <p>Start optimizing your health with data. Reach out to discuss testing options and pricing.</p>
+  <a href="mailto:admin@xgym.com.au" class="btn">Send Enquiry</a>
+</div>
+
+<footer style="background:#0a0a0a;border-top:1px solid #1e1e1e;padding:56px 20px 32px;font-family:'Barlow',sans-serif;">
+  <div style="max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr 1fr;gap:40px;margin-bottom:48px;">
+    <div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;color:#f5f2ec;letter-spacing:0.08em;margin-bottom:14px;"><span style="color:#c9a84c;">X</span>GYM</div>
+      <p style="color:#888;font-size:0.88rem;line-height:1.7;margin:0;">Castle Hill's dedicated strength and performance facility.</p>
+    </div>
+    <div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.78rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#c9a84c;margin-bottom:16px;">Quick Links</div>
+      <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;">
+        <li><a href="index.html" style="color:#aaa;text-decoration:none;font-size:0.88rem;">Home</a></li>
+        <li><a href="testing.html" style="color:#aaa;text-decoration:none;font-size:0.88rem;">Testing</a></li>
+        <li><a href="library.html" style="color:#aaa;text-decoration:none;font-size:0.88rem;">Training Library</a></li>
+        <li><a href="team.html" style="color:#aaa;text-decoration:none;font-size:0.88rem;">Team</a></li>
+        <li><a href="coaching.html" style="color:#aaa;text-decoration:none;font-size:0.88rem;">Coaching</a></li>
+        <li><a href="memberships.html" style="color:#aaa;text-decoration:none;font-size:0.88rem;">Memberships</a></li>
+      </ul>
+    </div>
+    <div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.78rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#c9a84c;margin-bottom:16px;">Contact</div>
+      <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;">
+        <li><a href="tel:0424023601" style="color:#aaa;text-decoration:none;font-size:0.88rem;">📞 0424 023 601</a></li>
+        <li><a href="mailto:admin@xgym.com.au" style="color:#aaa;text-decoration:none;font-size:0.88rem;">✉ admin@xgym.com.au</a></li>
+        <li><span style="color:#aaa;font-size:0.88rem;">📍 Castle Hill, NSW</span></li>
+      </ul>
+    </div>
+  </div>
+  <div style="max-width:1100px;margin:0 auto;border-top:1px solid #1e1e1e;padding-top:24px;text-align:center;">
+    <p style="color:#555;font-size:0.8rem;margin:0;letter-spacing:0.04em;">XGYM © 2026. All Rights Reserved.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var btn=document.getElementById('nav-hamburger');
+  var links=document.getElementById('nav-links');
+  if(btn&&links){btn.addEventListener('click',function(){btn.classList.toggle('open');links.classList.toggle('open');});}
+})();
+</script>
+
+</body>
+</html>

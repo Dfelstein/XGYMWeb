@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>XGYM — Personal Training Castle Hill</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&family=Barlow+Condensed:wght@700;900&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230a0a0a'/%3E%3Ctext y='.9em' font-size='80' x='10' fill='%23c9a84c' font-family='Arial Black,sans-serif' font-weight='900'%3EX%3C/text%3E%3C/svg%3E">
+  <style>
+    :root {
+      --black: #0a0a0a;
+      --white: #f5f2ec;
+      --gold: #c9a84c;
+      --gold-light: #e8c96a;
+      --mid: #141414;
+      --grey: #888;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      background: var(--black); 
+      color: var(--white); 
+      font-family: 'Barlow', sans-serif; 
+      font-weight: 300;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    nav { 
+      position: sticky; 
+      top: 0; 
+      z-index: 100; 
+      display: flex; 
+      align-items: center; 
+      justify-content: space-between; 
+      padding: 1.2rem 3rem; 
+      background: rgba(10, 10, 10, 0.97); 
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07); 
+      backdrop-filter: blur(10px); 
+    }
+    .nav-logo { 
+      font-family: 'Bebas Neue', sans-serif; 
+      font-size: 1.8rem; 
+      letter-spacing: 0.15em; 
+      color: var(--white); 
+      text-decoration: none; 
+      flex-shrink: 0; 
+    }
+    .nav-logo span { color: var(--gold); }
+    .nav-links { 
+      display: flex; 
+      align-items: center; 
+      gap: 2rem; 
+      list-style: none; 
+    }
+    .nav-link { 
+      font-size: 0.7rem; 
+      letter-spacing: 0.2em; 
+      text-transform: uppercase; 
+      color: var(--white); 
+      opacity: 0.45; 
+      text-decoration: none; 
+      transition: opacity 0.2s, color 0.2s; 
+      white-space: nowrap; 
+    }
+    .nav-link:hover { opacity: 1; color: var(--gold); }
+    .nav-link.nav-active { opacity: 1; color: var(--gold); }
+    .nav-cta { 
+      background: var(--gold); 
+      color: var(--black); 
+      padding: 0.6rem 1.5rem; 
+      font-family: 'Barlow Condensed', sans-serif; 
+      font-size: 0.8rem; 
+      letter-spacing: 0.2em; 
+      text-transform: uppercase; 
+      font-weight: 700; 
+      text-decoration: none; 
+      transition: background 0.2s; 
+      opacity: 1 !important; 
+      white-space: nowrap; 
+    }
+    .nav-cta:hover { background: var(--gold-light); }
+    .nav-hamburger { 
+      display: none; 
+      flex-direction: column; 
+      gap: 5px; 
+      background: none; 
+      border: none; 
+      cursor: pointer; 
+      padding: 4px; 
+    }
+    .nav-hamburger span { 
+      display: block; 
+      width: 22px; 
+      height: 2px; 
+      background: var(--white); 
+      transition: transform 0.25s, opacity 0.25s; 
+    }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    @media(max-width: 860px) {
+      nav { padding: 1rem 1.5rem; position: relative; }
+      .nav-hamburger { display: flex; }
+      .nav-links { 
+        display: none; 
+        flex-direction: column; 
+        align-items: flex-start; 
+        gap: 0; 
+        position: absolute; 
+        top: 100%; 
+        left: 0; 
+        right: 0; 
+        background: rgba(10, 10, 10, 0.99); 
+        border-bottom: 1px solid rgba(255, 255, 255, 0.07); 
+        padding: 0.5rem 0 1rem; 
+      }
+      .nav-links.open { display: flex; }
+      .nav-links li { width: 100%; }
+      .nav-link { display: block; padding: 0.75rem 1.5rem; width: 100%; }
+      .nav-cta { margin: 0.5rem 1.5rem; display: inline-block; width: auto; }
+    }
+    .hero {
+      position: relative; overflow: hidden;
+      height: 45vh; min-height: 360px;
+      
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 3rem;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background-image: url('images/team-03.jpg');
+      background-size: cover; background-position: center;
+      filter: brightness(0.4) contrast(1.1);
+    }
+    .hero-content h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.5rem, 8vw, 5rem);
+      letter-spacing: 0.08em;
+      margin-bottom: 1rem;
+      line-height: 1.1;
+      color: var(--white);
+    }
+    .hero-content p {
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
+      color: var(--gold);
+      letter-spacing: 0.05em;
+      font-weight: 300;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .section {
+      padding: 8rem 3rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .section-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      position: relative;
+      padding-left: 40px;
+    }
+    .section-label::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      width: 30px;
+      height: 1px;
+      background: var(--gold);
+    }
+    .section h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      letter-spacing: 0.06em;
+      margin-bottom: 3rem;
+      text-transform: uppercase;
+      line-height: 1.1;
+    }
+    .approach-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+      margin-bottom: 4rem;
+    }
+    .approach-left p {
+      font-size: 1rem;
+      line-height: 1.8;
+      color: #d0d0d0;
+      margin-bottom: 1.5rem;
+    }
+    .approach-left strong {
+      color: var(--gold);
+      font-weight: 600;
+    }
+    .approach-right {
+      background: var(--mid);
+      padding: 2.5rem;
+      border-left: 3px solid var(--gold);
+    }
+    .approach-right h4 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+      font-weight: 700;
+    }
+    .approach-right ul {
+      list-style: none;
+    }
+    .approach-right li {
+      padding: 0.8rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 0.95rem;
+      color: #c0c0c0;
+    }
+    .approach-right li:last-child {
+      border-bottom: none;
+    }
+    .approach-right li::before {
+      content: '▪ ';
+      color: var(--gold);
+      margin-right: 0.8rem;
+      font-weight: 600;
+    }
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+    .card {
+      background: var(--mid);
+      padding: 2rem;
+      border: 1px solid rgba(201, 168, 76, 0.2);
+      transition: all 0.3s ease;
+    }
+    .card:hover {
+      border-color: var(--gold);
+      background: rgba(201, 168, 76, 0.05);
+      transform: translateY(-4px);
+    }
+    .card h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem;
+      letter-spacing: 0.08em;
+      color: var(--gold);
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+    }
+    .card p {
+      font-size: 0.95rem;
+      color: #b0b0b0;
+      line-height: 1.7;
+    }
+    .session-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+    .session-card {
+      background: linear-gradient(135deg, var(--mid) 0%, rgba(25, 25, 25, 0.8) 100%);
+      padding: 2.5rem;
+      border: 1px solid rgba(201, 168, 76, 0.15);
+      display: flex;
+      flex-direction: column;
+    }
+    .session-card h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem;
+      letter-spacing: 0.08em;
+      color: var(--white);
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+    }
+    .session-card .duration {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+      font-weight: 700;
+    }
+    .session-card p {
+      font-size: 0.95rem;
+      color: #a0a0a0;
+      line-height: 1.7;
+      margin-bottom: 2rem;
+      flex-grow: 1;
+    }
+    .btn {
+      background: var(--gold);
+      color: var(--black);
+      padding: 1rem 2.5rem;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
+    }
+    .btn:hover {
+      background: var(--gold-light);
+    }
+    .who-section {
+      background: var(--mid);
+      padding: 3rem;
+      margin-bottom: 3rem;
+      border-left: 4px solid var(--gold);
+    }
+    .who-section h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem;
+      letter-spacing: 0.08em;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+    }
+    .who-section p {
+      font-size: 0.95rem;
+      line-height: 1.8;
+      color: #c0c0c0;
+      margin-bottom: 1rem;
+    }
+    .trainer-note {
+      background: rgba(201, 168, 76, 0.08);
+      border: 1px solid rgba(201, 168, 76, 0.2);
+      padding: 2rem;
+      margin-bottom: 3rem;
+      border-radius: 2px;
+    }
+    .trainer-note p {
+      font-size: 0.95rem;
+      color: #b0b0b0;
+      line-height: 1.8;
+    }
+    .cta-section {
+      background: linear-gradient(135deg, var(--mid) 0%, rgba(25, 25, 25, 0.6) 100%);
+      padding: 4rem 3rem;
+      text-align: center;
+      border: 1px solid rgba(201, 168, 76, 0.2);
+    }
+    .cta-section h2 {
+      font-size: 2rem;
+      margin-bottom: 2rem;
+    }
+    .cta-section .btn {
+      margin-top: 1rem;
+    }
+    footer {
+      background: #0a0a0a;
+      border-top: 1px solid #1e1e1e;
+      padding: 56px 20px 32px;
+      font-family: 'Barlow', sans-serif;
+    }
+    footer > div {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 48px;
+    }
+    .footer-col {
+      line-height: 1.7;
+    }
+    .footer-col > div:first-child {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      color: #f5f2ec;
+      letter-spacing: 0.08em;
+      margin-bottom: 14px;
+    }
+    .footer-col > div:first-child span {
+      color: #c9a84c;
+    }
+    .footer-col > p {
+      color: #888;
+      font-size: 0.88rem;
+      margin: 0;
+    }
+    .footer-col h4 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #c9a84c;
+      margin-bottom: 16px;
+    }
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .footer-col a {
+      color: #aaa;
+      text-decoration: none;
+      font-size: 0.88rem;
+    }
+    .footer-col a:hover {
+      color: #c9a84c;
+    }
+    .footer-bottom {
+      border-top: 1px solid #1e1e1e;
+      padding-top: 24px;
+      text-align: center;
+    }
+    .footer-bottom p {
+      color: #555;
+      font-size: 0.8rem;
+      margin: 0;
+      letter-spacing: 0.04em;
+    }
+    @media(max-width: 768px) {
+      .section { padding: 4rem 1.5rem; }
+      .approach-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .footer-grid { grid-template-columns: 1fr; gap: 30px; }
+      .hero {
+      position: relative; overflow: hidden; height: auto; padding: 4rem 2rem; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="nav-logo"><span>X</span>GYM</a>
+    <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html" class="nav-link">Home</a></li>
+      <li><a href="testing.html" class="nav-link">Testing</a></li>
+      <li><a href="library.html" class="nav-link">Training Library</a></li>
+      <li><a href="team.html" class="nav-link">Team</a></li>
+      <li><a href="coaching.html" class="nav-link">Coaching</a></li>
+      <li><a href="memberships.html" class="nav-link">Memberships</a></li>
+      <li><a href="contact.html" class="nav-link">Contact</a></li><li><a href="contact.html" class="nav-cta">Book Now</a></li>
+    </ul>
+  </nav>
+
+  <div class="hero">
+    <div class="hero-bg"></div>
+    <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(10,10,10,0.85));z-index:11;"></div>
+    <div class="hero-content" style="position:relative;z-index:20;">
+      <h1>Coached. Not Guessed.</h1>
+      <p>One-on-one personal training built on data, not assumptions. Your custom program starts with testing and evolves with science.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Our Approach</div>
+    <h2>Evidence-Based Personal Training</h2>
+    
+    <div class="approach-grid">
+      <div class="approach-left">
+        <p>At XGYM, your personal training program doesn't start with guesswork. It starts with <strong>comprehensive testing</strong>. We conduct DEXA scans, metabolic assessments, and strength evaluations to understand your body composition, metabolic capacity, and functional strengths and weaknesses.</p>
+        <p>From this data foundation, our coaches build a <strong>fully customised training program</strong> tailored specifically to your goals, current fitness level, and physiology. Your program evolves through structured periodisation blocks, with regular testing milestones to ensure you're progressing and adjusting as needed.</p>
+        <p>This isn't generic programming. It's <strong>your blueprint for success</strong>, informed by science and delivered by coaches who understand strength, performance, and body composition.</p>
+      </div>
+      <div class="approach-right">
+        <h4>What Makes XGYM PT Different</h4>
+        <ul>
+          <li>Data-Led Programming: Every program starts with testing</li>
+          <li>Periodised Training Blocks: Progressive overload with clear phases</li>
+          <li>Regular Testing Milestones: Measure progress with DEXA and strength assessments</li>
+          <li>Nutrition Guidance: Macro targets aligned with your goals</li>
+          <li>Full Testing Suite Access: All assessment tools at your service</li>
+          <li>Expert Coaching: Credentials in exercise science and strength sports</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">What's Included</div>
+    <h2>Your Complete PT Package</h2>
+    
+    <div class="card-grid">
+      <div class="card">
+        <h3>Strength & Performance Programming</h3>
+        <p>Custom-built training blocks designed for your goals. Whether you're increasing strength, building muscle, or improving athletic performance, your program evolves with you through structured periodisation.</p>
+      </div>
+      <div class="card">
+        <h3>Technique Coaching</h3>
+        <p>Learn proper movement patterns from day one. Our coaches ensure your form is optimal for safety, efficiency, and maximum results. Perfect for beginners and experienced lifters alike.</p>
+      </div>
+      <div class="card">
+        <h3>Nutrition Strategy</h3>
+        <p>Training is only half the equation. We provide macro targets, nutrition guidance, and practical strategies aligned with your body composition and performance goals.</p>
+      </div>
+      <div class="card">
+        <h3>Progress Testing</h3>
+        <p>Regular assessments using DEXA, metabolic testing, and strength benchmarks keep you accountable and ensure your program remains effective as you progress.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Session Options</div>
+    <h2>Choose Your Training Frequency</h2>
+    
+    <div class="session-cards">
+      <div class="session-card">
+        <h3>1x Per Week</h3>
+        <div class="duration">Once Weekly</div>
+        <p>Perfect for building consistency and learning fundamental patterns. Ideal for beginners or those balancing training with a busy schedule. You'll receive a structured program to follow between sessions.</p>
+        <a href="https://xgym.com.au/personal-training/#enquiry" class="btn">Enquire</a>
+      </div>
+      <div class="session-card">
+        <h3>2x Per Week</h3>
+        <div class="duration">Twice Weekly</div>
+        <p>The sweet spot for most clients. Enough frequency to drive serious progress while allowing adequate recovery. Perfect for body composition changes and strength development.</p>
+        <a href="https://xgym.com.au/personal-training/#enquiry" class="btn">Enquire</a>
+      </div>
+      <div class="session-card">
+        <h3>3x Per Week</h3>
+        <div class="duration">Three Times Weekly</div>
+        <p>For serious progress. Optimal frequency for advanced athletes, competition prep, and clients committed to maximum results. Includes detailed nutrition and recovery guidance.</p>
+        <a href="https://xgym.com.au/personal-training/#enquiry" class="btn">Enquire</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="who-section">
+      <h3>Who Is Personal Training For?</h3>
+      <p><strong>Beginners Starting Strong:</strong> If you're new to structured training, personal training accelerates your progress and ensures you build healthy movement patterns from day one. No guesswork, just expert guidance.</p>
+      <p><strong>Experienced Athletes:</strong> Whether you're chasing strength records, muscle gain, or athletic performance, our coaches design periodised programs that challenge you appropriately and drive measurable progress.</p>
+      <p><strong>Injury Recovery & Prevention:</strong> Coming back from injury? Our coaches understand rehabilitation principles and design progressions that build strength safely. We also teach injury prevention strategies for long-term health.</p>
+      <p><strong>Competition Prep:</strong> Preparing for a powerlifting meet, bodybuilding competition, or fitness event? We specialise in peaking strategies and competition-specific programming.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="trainer-note">
+      <p><strong>Coach Credentials:</strong> All personal training at XGYM is delivered by qualified coaches with backgrounds in exercise science and strength sports. Your coach is invested in your success and brings real-world experience to every session.</p>
+    </div>
+
+
+  <div class="section">
+    <div class="section-label">In The Gym</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin-bottom:3rem;">
+      <img src="images/team-03.jpg" alt="XGYM personal training" style="width:100%;height:280px;object-fit:cover;display:block;">
+      <img src="images/p1-05.jpg" alt="XGYM coach with client" style="width:100%;height:280px;object-fit:cover;display:block;">
+      <img src="images/p1-14.jpg" alt="XGYM strength training" style="width:100%;height:280px;object-fit:cover;display:block;">
+      <img src="images/team-05.jpg" alt="XGYM coaching session" style="width:100%;height:280px;object-fit:cover;display:block;">
+    </div>
+  </div>
+
+    <div class="cta-section">
+      <h2>Ready to Start Your Transformation?</h2>
+      <p style="font-size: 1rem; color: #a0a0a0; margin-bottom: 0;">Get started with evidence-based personal training designed specifically for you.</p>
+      <a href="https://xgym.com.au/personal-training/#enquiry" class="btn">Enquire About Personal Training</a>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div><span>X</span>GYM</div>
+        <p>Castle Hill's dedicated strength and performance facility.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="testing.html">Testing</a></li>
+          <li><a href="library.html">Training Library</a></li>
+          <li><a href="team.html">Team</a></li>
+          <li><a href="coaching.html">Coaching</a></li>
+          <li><a href="memberships.html">Memberships</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="tel:0424023601">📞 0424 023 601</a></li>
+          <li><a href="mailto:admin@xgym.com.au">✉ admin@xgym.com.au</a></li>
+          <li><span style="color: #aaa; font-size: 0.88rem;">📍 Castle Hill, NSW</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>XGYM © 2026. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    (function(){
+      var btn = document.getElementById('nav-hamburger');
+      var links = document.getElementById('nav-links');
+      if(btn && links) {
+        btn.addEventListener('click', function(){
+          btn.classList.toggle('open');
+          links.classList.toggle('open');
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

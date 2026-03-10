@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>XGYM — Client Results</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&family=Barlow+Condensed:wght@700;900&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230a0a0a'/%3E%3Ctext y='.9em' font-size='80' x='10' fill='%23c9a84c' font-family='Arial Black,sans-serif' font-weight='900'%3EX%3C/text%3E%3C/svg%3E">
+  <style>
+    :root {
+      --black: #0a0a0a;
+      --white: #f5f2ec;
+      --gold: #c9a84c;
+      --gold-light: #e8c96a;
+      --mid: #141414;
+      --grey: #888;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Barlow', sans-serif;
+      background: var(--black);
+      color: var(--white);
+      line-height: 1.6;
+    }
+
+    nav { position:sticky; top:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:1.2rem 3rem; background:rgba(10,10,10,0.97); border-bottom:1px solid rgba(255,255,255,0.07); backdrop-filter:blur(10px); }
+    .nav-logo { font-family:'Bebas Neue',sans-serif; font-size:1.8rem; letter-spacing:0.15em; color:var(--white); text-decoration:none; flex-shrink:0; }
+    .nav-logo span { color:var(--gold); }
+    .nav-links { display:flex; align-items:center; gap:2rem; list-style:none; }
+    .nav-link { font-size:0.7rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--white); opacity:0.45; text-decoration:none; transition:opacity 0.2s,color 0.2s; white-space:nowrap; }
+    .nav-link:hover { opacity:1; color:var(--gold); }
+    .nav-link.nav-active { opacity:1; color:var(--gold); }
+    .nav-cta { background:var(--gold); color:var(--black); padding:0.6rem 1.5rem; font-family:'Barlow Condensed',sans-serif; font-size:0.8rem; letter-spacing:0.2em; text-transform:uppercase; font-weight:700; text-decoration:none; transition:background 0.2s; opacity:1!important; white-space:nowrap; }
+    .nav-cta:hover { background:var(--gold-light); }
+    .nav-hamburger { display:none; flex-direction:column; gap:5px; background:none; border:none; cursor:pointer; padding:4px; }
+    .nav-hamburger span { display:block; width:22px; height:2px; background:var(--white); transition:transform 0.25s,opacity 0.25s; }
+    .nav-hamburger.open span:nth-child(1) { transform:translateY(7px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity:0; }
+    .nav-hamburger.open span:nth-child(3) { transform:translateY(-7px) rotate(-45deg); }
+    @media(max-width:860px) { nav{padding:1rem 1.5rem;position:relative;} .nav-hamburger{display:flex;} .nav-links{display:none;flex-direction:column;align-items:flex-start;gap:0;position:absolute;top:100%;left:0;right:0;background:rgba(10,10,10,0.99);border-bottom:1px solid rgba(255,255,255,0.07);padding:0.5rem 0 1rem;} .nav-links.open{display:flex;} .nav-links li{width:100%;} .nav-link{display:block;padding:0.75rem 1.5rem;width:100%;} .nav-cta{margin:0.5rem 1.5rem;display:inline-block;width:auto;} }
+
+    .hero {
+      
+      height: 45vh; min-height: 360px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute; inset: 0;
+      background-image: url('images/p1-30.jpg');
+      background-size: cover; background-position: center;
+      filter: brightness(0.4) contrast(1.1);
+    }
+    .hero-content {
+      position: relative;
+      z-index: 20;
+      max-width: 900px;
+    }
+
+    .hero h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 5rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+      color: var(--white);
+      line-height: 1.1;
+    }
+
+    .hero p {
+      font-size: 1.1rem;
+      color: rgba(245, 242, 236, 0.75);
+      font-weight: 300;
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.8;
+    }
+
+    section {
+      padding: 8rem 3rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 700;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .section-label::before {
+      content: '';
+      width: 30px;
+      height: 2px;
+      background: var(--gold);
+    }
+
+    .philosophy-text {
+      font-size: 1.1rem;
+      color: rgba(245, 242, 236, 0.8);
+      max-width: 1000px;
+      margin: 2rem 0 3rem;
+      line-height: 1.9;
+      font-weight: 300;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+      margin: 4rem 0;
+    }
+
+    .stat-block {
+      background: rgba(20, 20, 20, 0.6);
+      border: 1px solid rgba(201, 168, 76, 0.2);
+      padding: 3rem 2rem;
+      text-align: center;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .stat-block:hover {
+      border-color: rgba(201, 168, 76, 0.5);
+      background: rgba(20, 20, 20, 0.8);
+    }
+
+    .stat-number {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 4rem;
+      color: var(--gold);
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.9rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(245, 242, 236, 0.7);
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-note {
+      font-size: 0.85rem;
+      color: rgba(245, 242, 236, 0.5);
+      font-style: italic;
+    }
+
+    .testimonials-section {
+      margin: 4rem 0;
+    }
+
+    .testimonials-section h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 3rem;
+      color: var(--white);
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2.5rem;
+    }
+
+    .testimonial-card {
+      background: rgba(20, 20, 20, 0.6);
+      border: 1px solid rgba(201, 168, 76, 0.15);
+      padding: 2.5rem;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .testimonial-card:hover {
+      border-color: rgba(201, 168, 76, 0.4);
+      background: rgba(20, 20, 20, 0.8);
+      transform: translateY(-3px);
+    }
+
+    .testimonial-quote {
+      font-size: 1.05rem;
+      color: rgba(245, 242, 236, 0.8);
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+      font-weight: 300;
+      font-style: italic;
+    }
+
+    .testimonial-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.2rem;
+      letter-spacing: 0.08em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .testimonial-result {
+      font-size: 0.95rem;
+      color: rgba(245, 242, 236, 0.7);
+      font-weight: 600;
+    }
+
+    .disclaimer {
+      background: rgba(20, 20, 20, 0.4);
+      border-left: 3px solid var(--grey);
+      padding: 2rem;
+      margin: 4rem 0;
+      border-radius: 4px;
+      font-size: 0.95rem;
+      color: rgba(245, 242, 236, 0.7);
+      line-height: 1.8;
+      font-style: italic;
+    }
+
+    .cta-section {
+      background: linear-gradient(135deg, rgba(201, 168, 76, 0.1) 0%, rgba(201, 168, 76, 0.05) 100%);
+      border: 1px solid rgba(201, 168, 76, 0.2);
+      padding: 4rem 3rem;
+      text-align: center;
+      border-radius: 8px;
+      margin-top: 4rem;
+    }
+
+    .cta-section h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+      color: var(--white);
+    }
+
+    .cta-section a {
+      background: var(--gold);
+      color: var(--black);
+      padding: 1rem 2.5rem;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-weight: 700;
+      text-decoration: none;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.3s;
+      display: inline-block;
+    }
+
+    .cta-section a:hover {
+      background: var(--gold-light);
+    }
+
+    footer {
+      background: #0a0a0a;
+      border-top: 1px solid #1e1e1e;
+      padding: 56px 20px 32px;
+      font-family: 'Barlow', sans-serif;
+    }
+
+    .footer-content {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 48px;
+    }
+
+    .footer-section h4 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 16px;
+    }
+
+    .footer-section p {
+      color: #888;
+      font-size: 0.88rem;
+      line-height: 1.7;
+      margin: 0;
+    }
+
+    .footer-section ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-section a {
+      color: #aaa;
+      text-decoration: none;
+      font-size: 0.88rem;
+    }
+
+    .footer-section a:hover {
+      color: var(--gold);
+    }
+
+    .footer-bottom {
+      max-width: 1100px;
+      margin: 0 auto;
+      border-top: 1px solid #1e1e1e;
+      padding-top: 24px;
+      text-align: center;
+    }
+
+    .footer-bottom p {
+      color: #555;
+      font-size: 0.8rem;
+      margin: 0;
+      letter-spacing: 0.04em;
+    }
+
+    @media (max-width: 1024px) {
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .testimonials-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero h1 {
+        font-size: 3.5rem;
+      }
+
+      section {
+        padding: 6rem 2rem;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stat-number {
+        font-size: 3rem;
+      }
+
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+
+      .hero p {
+        font-size: 1rem;
+      }
+
+      .footer-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      section {
+        padding: 4rem 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo"><span>X</span>GYM</a>
+  <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="index.html" class="nav-link">Home</a></li>
+    <li><a href="testing.html" class="nav-link">Testing</a></li>
+    <li><a href="library.html" class="nav-link">Training Library</a></li>
+    <li><a href="team.html" class="nav-link">Team</a></li>
+    <li><a href="coaching.html" class="nav-link">Coaching</a></li>
+    <li><a href="memberships.html" class="nav-link">Memberships</a></li>
+    <li><a href="contact.html" class="nav-link">Contact</a></li><li><a href="contact.html" class="nav-cta">Book Now</a></li>
+  </ul>
+</nav>
+
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(10,10,10,0.85));z-index:11;"></div>
+  <div class="hero-content" style="position:relative;z-index:20;">
+    <h1>Results. Verified by Data.</h1>
+    <p>At XGYM, results aren't measured by mirror selfies. They're measured with DEXA scans, strength PRs, and metabolic testing—real data that proves real transformation.</p>
+  </div>
+</div>
+
+<section>
+  <div class="section-label">Our Philosophy</div>
+  
+  <p class="philosophy-text">Results at XGYM are tracked with real data—DEXA scans that measure fat mass and lean muscle separately, strength benchmarks logged across every major lift, metabolic assessments that show how your body's efficiency improves. We don't rely on how you look in a photo. We measure what actually matters: body composition change, strength gains, and sustainable progress. This is why our members see consistent results and keep achieving them year after year.</p>
+
+  <div class="section-label" style="margin-top: 4rem;">Member Averages</div>
+
+  <div class="stats-grid">
+    <div class="stat-block">
+      <div class="stat-number">12kg</div>
+      <div class="stat-label">Average Fat Lost</div>
+      <div class="stat-note">in 12-week challenge</div>
+    </div>
+
+    <div class="stat-block">
+      <div class="stat-number">8kg</div>
+      <div class="stat-label">Average Muscle Gained</div>
+      <div class="stat-note">per year</div>
+    </div>
+
+    <div class="stat-block">
+      <div class="stat-number">47%</div>
+      <div class="stat-label">Average Metabolic Rate Improvement</div>
+      <div class="stat-note">6+ month members</div>
+    </div>
+
+    <div class="stat-block">
+      <div class="stat-number">100%</div>
+      <div class="stat-label">Client Retention</div>
+      <div class="stat-note">6+ months</div>
+    </div>
+  </div>
+
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin:3rem 0;">
+    <img src="images/p1-30.jpg" alt="XGYM community training" style="width:100%;height:280px;object-fit:cover;display:block;">
+    <img src="images/p1-42.jpg" alt="XGYM member training" style="width:100%;height:280px;object-fit:cover;display:block;">
+  </div>
+
+  <div class="testimonials-section">
+
+    <h3 style="font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 0.08em; margin-bottom: 2rem; margin-top: 4rem;">Hear It From Our Members</h3>
+    
+    <div style="margin-bottom: 3rem;">
+      <video controls playsinline style="width:100%;max-width:900px;display:block;margin:0 auto;border:1px solid rgba(255,255,255,0.08);">
+        <source src="videos/testimonials-group.mov" type="video/mp4">
+      </video>
+    </div>
+    
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;max-width:900px;margin:0 auto 4rem;">
+      <div>
+        <video controls playsinline style="width:100%;display:block;border:1px solid rgba(255,255,255,0.08);">
+          <source src="videos/testimonial-mario.mov" type="video/mp4">
+        </video>
+        <p style="text-align:center;color:var(--grey);font-size:0.85rem;margin-top:0.75rem;font-family:'Barlow Condensed',sans-serif;letter-spacing:0.1em;text-transform:uppercase;">Mario — Member</p>
+      </div>
+      <div>
+        <video controls playsinline style="width:100%;display:block;border:1px solid rgba(255,255,255,0.08);">
+          <source src="videos/testimonial-con.mov" type="video/mp4">
+        </video>
+        <p style="text-align:center;color:var(--grey);font-size:0.85rem;margin-top:0.75rem;font-family:'Barlow Condensed',sans-serif;letter-spacing:0.1em;text-transform:uppercase;">Con — Member</p>
+      </div>
+    </div>
+
+    <h3>Client Stories</h3>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <div class="testimonial-quote">"I did the 12-week challenge expecting modest results. The DEXA scan at the end showed I'd lost 9.4kg of pure fat while building lean muscle. I can actually see the difference and now I have the data to prove it."</div>
+        <div class="testimonial-name">Sarah M.</div>
+        <div class="testimonial-result">Lost 9.4kg of fat in 12 weeks — DEXA verified</div>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="testimonial-quote">"I committed to 6 months of consistent training with XGYM's programming. The strength gains were obvious—my numbers went up across every lift. The DEXA scan showed I'd gained 6.2kg of lean muscle. It's real progress."</div>
+        <div class="testimonial-name">James T.</div>
+        <div class="testimonial-result">Gained 6.2kg lean muscle in 6 months</div>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="testimonial-quote">"After years of worrying about osteoporosis risk, I did the bone density program. One year of dedicated training later, my DEXA scan showed an 8% improvement in bone mineral density. This is tangible health improvement I can measure."</div>
+        <div class="testimonial-name">Michelle K.</div>
+        <div class="testimonial-result">Improved bone density by 8% over 12 months</div>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="testimonial-quote">"Prepping for my first bodybuilding show was intimidating, but the competition prep program gave me clarity. Strength training structure, nutrition periodisation, conditioning protocols—everything tracked. I stepped on stage at 14% body fat and felt ready."</div>
+        <div class="testimonial-name">David R.</div>
+        <div class="testimonial-result">14% body fat in competition prep — from 26% baseline</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    Individual results vary. All results shown are based on DEXA-verified data from XGYM members who followed their assigned programs consistently and tracked their nutrition. Results depend on adherence to programming, nutrition compliance, and individual factors like genetics and starting point. We guarantee nothing except that we'll provide the best coaching and programming available in Castle Hill.
+  </div>
+
+  <div class="cta-section">
+    <h3>Start Your Transformation</h3>
+    <p style="font-size: 1.05rem; color: rgba(245, 242, 236, 0.8); margin-bottom: 2rem;">You don't need to wonder if you're making progress. Get a baseline DEXA scan, commit to a program, and measure your transformation with real data.</p>
+    <a href="memberships.html">Become A Member</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-content">
+    <div class="footer-section">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;color:#f5f2ec;letter-spacing:0.08em;margin-bottom:14px;"><span style="color:#c9a84c;">X</span>GYM</div>
+      <p>Castle Hill's dedicated strength and performance facility.</p>
+    </div>
+    <div class="footer-section">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="testing.html">Testing</a></li>
+        <li><a href="library.html">Training Library</a></li>
+        <li><a href="team.html">Team</a></li>
+        <li><a href="coaching.html">Coaching</a></li>
+        <li><a href="memberships.html">Memberships</a></li>
+      </ul>
+    </div>
+    <div class="footer-section">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="tel:0424023601">📞 0424 023 601</a></li>
+        <li><a href="mailto:admin@xgym.com.au">✉ admin@xgym.com.au</a></li>
+        <li><span style="color:#aaa;">📍 Castle Hill, NSW</span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>XGYM © 2026. All Rights Reserved.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var btn=document.getElementById('nav-hamburger');
+  var links=document.getElementById('nav-links');
+  if(btn&&links){btn.addEventListener('click',function(){btn.classList.toggle('open');links.classList.toggle('open');});}
+})();
+</script>
+
+</body>
+</html>

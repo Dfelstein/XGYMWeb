@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>XGYM — Contact Us</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&family=Barlow+Condensed:wght@700;900&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230a0a0a'/%3E%3Ctext y='.9em' font-size='80' x='10' fill='%23c9a84c' font-family='Arial Black,sans-serif' font-weight='900'%3EX%3C/text%3E%3C/svg%3E">
+  <style>
+    :root {
+      --black: #0a0a0a;
+      --white: #f5f2ec;
+      --gold: #c9a84c;
+      --gold-light: #e8c96a;
+      --mid: #141414;
+      --grey: #888;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Barlow', sans-serif;
+      background: var(--black);
+      color: var(--white);
+      line-height: 1.6;
+    }
+
+    nav { position:sticky; top:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:1.2rem 3rem; background:rgba(10,10,10,0.97); border-bottom:1px solid rgba(255,255,255,0.07); backdrop-filter:blur(10px); }
+    .nav-logo { font-family:'Bebas Neue',sans-serif; font-size:1.8rem; letter-spacing:0.15em; color:var(--white); text-decoration:none; flex-shrink:0; }
+    .nav-logo span { color:var(--gold); }
+    .nav-links { display:flex; align-items:center; gap:2rem; list-style:none; }
+    .nav-link { font-size:0.7rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--white); opacity:0.45; text-decoration:none; transition:opacity 0.2s,color 0.2s; white-space:nowrap; }
+    .nav-link:hover { opacity:1; color:var(--gold); }
+    .nav-link.nav-active { opacity:1; color:var(--gold); }
+    .nav-cta { background:var(--gold); color:var(--black); padding:0.6rem 1.5rem; font-family:'Barlow Condensed',sans-serif; font-size:0.8rem; letter-spacing:0.2em; text-transform:uppercase; font-weight:700; text-decoration:none; transition:background 0.2s; opacity:1!important; white-space:nowrap; }
+    .nav-cta:hover { background:var(--gold-light); }
+    .nav-hamburger { display:none; flex-direction:column; gap:5px; background:none; border:none; cursor:pointer; padding:4px; }
+    .nav-hamburger span { display:block; width:22px; height:2px; background:var(--white); transition:transform 0.25s,opacity 0.25s; }
+    .nav-hamburger.open span:nth-child(1) { transform:translateY(7px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity:0; }
+    .nav-hamburger.open span:nth-child(3) { transform:translateY(-7px) rotate(-45deg); }
+    @media(max-width:860px) { nav{padding:1rem 1.5rem;position:relative;} .nav-hamburger{display:flex;} .nav-links{display:none;flex-direction:column;align-items:flex-start;gap:0;position:absolute;top:100%;left:0;right:0;background:rgba(10,10,10,0.99);border-bottom:1px solid rgba(255,255,255,0.07);padding:0.5rem 0 1rem;} .nav-links.open{display:flex;} .nav-links li{width:100%;} .nav-link{display:block;padding:0.75rem 1.5rem;width:100%;} .nav-cta{margin:0.5rem 1.5rem;display:inline-block;width:auto;} }
+
+    .hero {
+      
+      height: 45vh; min-height: 360px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute; inset: 0;
+      background-image: url('images/space-05.jpg');
+      background-size: cover; background-position: center 85%;
+      filter: brightness(0.4) contrast(1.1);
+    }
+    .hero-content {
+      position: relative;
+      z-index: 20;
+      max-width: 900px;
+    }
+
+    .hero h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 5rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+      color: var(--white);
+      line-height: 1.1;
+    }
+
+    .hero p {
+      font-size: 1.1rem;
+      color: rgba(245, 242, 236, 0.75);
+      font-weight: 300;
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.8;
+    }
+
+    section {
+      padding: 8rem 3rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 700;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .section-label::before {
+      content: '';
+      width: 30px;
+      height: 2px;
+      background: var(--gold);
+    }
+
+    .contact-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      margin-top: 3rem;
+    }
+
+    .contact-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .contact-card {
+      background: rgba(20, 20, 20, 0.6);
+      border: 1px solid rgba(201, 168, 76, 0.2);
+      padding: 2rem;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .contact-card:hover {
+      border-color: rgba(201, 168, 76, 0.5);
+      background: rgba(20, 20, 20, 0.8);
+    }
+
+    .contact-card h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem;
+      letter-spacing: 0.1em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .contact-card p, .contact-card a {
+      font-size: 1.1rem;
+      color: rgba(245, 242, 236, 0.85);
+      text-decoration: none;
+      line-height: 1.8;
+      word-break: break-word;
+    }
+
+    .contact-card a:hover {
+      color: var(--gold);
+    }
+
+    .contact-card .item {
+      margin-bottom: 0.8rem;
+    }
+
+    .form-container {
+      background: rgba(20, 20, 20, 0.6);
+      border: 1px solid rgba(201, 168, 76, 0.2);
+      padding: 2.5rem;
+      border-radius: 8px;
+    }
+
+    .form-container h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem;
+      letter-spacing: 0.1em;
+      color: var(--white);
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.9rem 1rem;
+      background: rgba(10, 10, 10, 0.8);
+      border: 1px solid rgba(201, 168, 76, 0.15);
+      color: var(--white);
+      font-family: 'Barlow', sans-serif;
+      font-size: 1rem;
+      border-radius: 4px;
+      transition: border-color 0.2s;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--gold);
+      background: rgba(10, 10, 10, 0.95);
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 150px;
+    }
+
+    .submit-btn {
+      background: var(--gold);
+      color: var(--black);
+      padding: 1rem 2.5rem;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-weight: 700;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.3s;
+      width: 100%;
+      margin-top: 0.5rem;
+    }
+
+    .submit-btn:hover {
+      background: var(--gold-light);
+    }
+
+    .find-us-section {
+      background: rgba(20, 20, 20, 0.4);
+      border-top: 1px solid rgba(201, 168, 76, 0.2);
+      border-bottom: 1px solid rgba(201, 168, 76, 0.2);
+      padding: 6rem 3rem;
+      margin: 4rem 0;
+      text-align: center;
+    }
+
+    .find-us-section h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.5rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+      color: var(--white);
+    }
+
+    .find-us-section p {
+      font-size: 1.05rem;
+      color: rgba(245, 242, 236, 0.8);
+      max-width: 700px;
+      margin: 0 auto 1rem;
+      font-weight: 300;
+      line-height: 1.8;
+    }
+
+    .social-section {
+      text-align: center;
+      padding: 4rem 3rem;
+    }
+
+    .social-section h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+      color: var(--white);
+    }
+
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      flex-wrap: wrap;
+    }
+
+    .social-links a {
+      font-size: 1.1rem;
+      color: var(--gold);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s;
+    }
+
+    .social-links a:hover {
+      color: var(--gold-light);
+    }
+
+    footer {
+      background: #0a0a0a;
+      border-top: 1px solid #1e1e1e;
+      padding: 56px 20px 32px;
+      font-family: 'Barlow', sans-serif;
+    }
+
+    .footer-content {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 48px;
+    }
+
+    .footer-section h4 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 16px;
+    }
+
+    .footer-section p {
+      color: #888;
+      font-size: 0.88rem;
+      line-height: 1.7;
+      margin: 0;
+    }
+
+    .footer-section ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-section a {
+      color: #aaa;
+      text-decoration: none;
+      font-size: 0.88rem;
+    }
+
+    .footer-section a:hover {
+      color: var(--gold);
+    }
+
+    .footer-bottom {
+      max-width: 1100px;
+      margin: 0 auto;
+      border-top: 1px solid #1e1e1e;
+      padding-top: 24px;
+      text-align: center;
+    }
+
+    .footer-bottom p {
+      color: #555;
+      font-size: 0.8rem;
+      margin: 0;
+      letter-spacing: 0.04em;
+    }
+
+    @media (max-width: 1024px) {
+      .contact-container {
+        grid-template-columns: 1fr;
+      }
+
+      .hero h1 {
+        font-size: 3.5rem;
+      }
+
+      section {
+        padding: 6rem 2rem;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+
+      .hero p {
+        font-size: 1rem;
+      }
+
+      .footer-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      section {
+        padding: 4rem 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo"><span>X</span>GYM</a>
+  <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="index.html" class="nav-link">Home</a></li>
+    <li><a href="testing.html" class="nav-link">Testing</a></li>
+    <li><a href="library.html" class="nav-link">Training Library</a></li>
+    <li><a href="team.html" class="nav-link">Team</a></li>
+    <li><a href="coaching.html" class="nav-link">Coaching</a></li>
+    <li><a href="memberships.html" class="nav-link">Memberships</a></li>
+    <li><a href="contact.html" class="nav-link">Contact</a></li><li><a href="contact.html" class="nav-cta">Book Now</a></li>
+  </ul>
+</nav>
+
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(10,10,10,0.85));z-index:11;"></div>
+  <div class="hero-content" style="position:relative;z-index:20;">
+    <h1>Get In Touch</h1>
+    <p>We're based in Castle Hill, NSW. Reach out to book, enquire, or just say hello. Our team is ready to help you reach your strength and performance goals.</p>
+  </div>
+</div>
+
+<section>
+  <div class="section-label">Contact Details</div>
+  
+  <div class="contact-container">
+    <div class="contact-cards">
+      <div class="contact-card">
+        <h3>Phone</h3>
+        <div class="item">
+          <a href="tel:0424023601">0424 023 601</a>
+        </div>
+        <p style="font-size: 0.95rem; color: rgba(245, 242, 236, 0.6); margin-top: 1rem;">Call us to discuss your fitness journey or book an appointment.</p>
+      </div>
+
+      <div class="contact-card">
+        <h3>Email</h3>
+        <div class="item">
+          <a href="mailto:admin@xgym.com.au">admin@xgym.com.au</a>
+        </div>
+        <p style="font-size: 0.95rem; color: rgba(245, 242, 236, 0.6); margin-top: 1rem;">Get in touch via email for detailed enquiries or membership questions.</p>
+      </div>
+
+      <div class="contact-card">
+        <h3>Location</h3>
+        <p>Castle Hill, NSW</p>
+        <p style="font-size: 0.95rem; color: rgba(245, 242, 236, 0.6); margin-top: 1rem;">Contact us for our exact address and directions. Convenient parking available for members.</p>
+      </div>
+
+      <div class="contact-card">
+        <h3>Hours</h3>
+        <p style="color: var(--gold); font-family: 'Barlow Condensed', sans-serif; font-size: 1.1rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.75rem;">Gym Access — 24/7</p>
+        <div style="line-height: 2; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 0.75rem; margin-top: 0.25rem;">
+          <p style="margin: 0; font-size: 0.88rem; color: rgba(245,242,236,0.55); text-transform: uppercase; letter-spacing: 0.15em; font-size: 0.7rem; margin-bottom: 0.4rem;">Staffed Hours</p>
+          <p style="margin: 0;">Mon–Fri: 5:30am – 8:00pm</p>
+          <p style="margin: 0;">Sat: 7:00am – 12:00pm</p>
+          <p style="margin: 0;">Sun: Closed</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-container">
+      <h3>Send Us a Message</h3>
+      <form action="mailto:admin@xgym.com.au" method="post" enctype="text/plain">
+        <div class="form-group">
+          <label for="name">Full Name</label>
+          <input type="text" id="name" name="name" required>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" required>
+        </div>
+
+        <div class="form-group">
+          <label for="phone">Phone Number</label>
+          <input type="tel" id="phone" name="phone">
+        </div>
+
+        <div class="form-group">
+          <label for="subject">Subject</label>
+          <select id="subject" name="subject" required>
+            <option value="">Select a subject...</option>
+            <option value="General Enquiry">General Enquiry</option>
+            <option value="Personal Training">Personal Training</option>
+            <option value="Memberships">Memberships</option>
+            <option value="DEXA Scan">DEXA Scan</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" required></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn">Send Message</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<div class="find-us-section">
+  <h2>Find Us in Castle Hill</h2>
+  <p>XGYM is strategically located in Castle Hill, NSW—one of Sydney's premier suburbs for fitness and training. We're designed for serious athletes and performance-focused individuals who demand excellence. With ample parking and a dedicated facility, we've created the perfect environment for strength training and body composition work.</p>
+  <p style="margin-top: 2rem; font-style: italic; color: rgba(245, 242, 236, 0.65);">Contact us for exact directions and parking information.</p>
+</div>
+
+
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.5rem;margin-top:2.5rem;">
+    <img src="images/space-05.jpg" alt="XGYM Castle Hill facility" style="width:100%;height:200px;object-fit:cover;object-position:center 70%;display:block;">
+    <img src="images/space-08.jpg" alt="XGYM gym floor" style="width:100%;height:200px;object-fit:cover;display:block;">
+    <img src="images/space-12.jpg" alt="XGYM equipment" style="width:100%;height:200px;object-fit:cover;display:block;">
+  </div>
+
+<div class="social-section">
+  <h2>Follow Us</h2>
+  <div class="social-links">
+    <a href="https://instagram.com/xgym_castlehill" target="_blank">Instagram: @xgym_castlehill</a>
+    <a href="https://facebook.com/xgymcastlehill" target="_blank">Facebook: XGYM Castle Hill</a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-content">
+    <div class="footer-section">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;color:#f5f2ec;letter-spacing:0.08em;margin-bottom:14px;"><span style="color:#c9a84c;">X</span>GYM</div>
+      <p>Castle Hill's dedicated strength and performance facility.</p>
+    </div>
+    <div class="footer-section">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="testing.html">Testing</a></li>
+        <li><a href="library.html">Training Library</a></li>
+        <li><a href="team.html">Team</a></li>
+        <li><a href="coaching.html">Coaching</a></li>
+        <li><a href="memberships.html">Memberships</a></li>
+      </ul>
+    </div>
+    <div class="footer-section">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="tel:0424023601">📞 0424 023 601</a></li>
+        <li><a href="mailto:admin@xgym.com.au">✉ admin@xgym.com.au</a></li>
+        <li><span style="color:#aaa;">📍 Castle Hill, NSW</span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>XGYM © 2026. All Rights Reserved.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var btn=document.getElementById('nav-hamburger');
+  var links=document.getElementById('nav-links');
+  if(btn&&links){btn.addEventListener('click',function(){btn.classList.toggle('open');links.classList.toggle('open');});}
+})();
+</script>
+
+</body>
+</html>
