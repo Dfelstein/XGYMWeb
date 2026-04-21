@@ -367,7 +367,7 @@
     <li><a href="team.html" class="nav-link">Team</a></li>
     <li><a href="coaching.html" class="nav-link">Coaching</a></li>
     <li><a href="memberships.html" class="nav-link">Memberships</a></li>
-    <li><a href="contact.html" class="nav-link">Contact</a></li><li><a href="contact.html" class="nav-cta">Book Now</a></li>
+    <li><a href="contact.html" class="nav-link">Contact</a></li><li><a href="#" class="nav-cta" onclick="openBookingModal(event)">Book Now</a></li>
   </ul>
 </nav>
 
@@ -515,7 +515,7 @@
 <div class="cta-section">
   <h2>Book Your DEXA Scan</h2>
   <p>Get the most accurate body composition data available. No guessing. No estimation. Just science.</p>
-  <a href="https://xgym.com.au/dexa-scan/#book-now" class="btn">Book Now</a>
+  <a href="#" class="btn" onclick="openBookingModal(event)">Book Now</a>
 </div>
 
 <footer style="background:#0a0a0a;border-top:1px solid #1e1e1e;padding:56px 20px 32px;font-family:'Barlow',sans-serif;">
@@ -549,12 +549,39 @@
   </div>
 </footer>
 
+<!-- Booking Modal -->
+<div id="booking-modal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.85);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:1rem;">
+  <div style="position:relative;width:100%;max-width:780px;max-height:90vh;background:#0f0f0f;border:1px solid rgba(201,168,76,0.25);border-radius:4px;display:flex;flex-direction:column;overflow:hidden;">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:1.2rem 1.5rem;border-bottom:1px solid rgba(255,255,255,0.08);flex-shrink:0;">
+      <h3 style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:0.12em;color:#f5f2ec;margin:0;">Book Your <span style="color:#c9a84c;">DEXA Scan</span></h3>
+      <button onclick="closeBookingModal()" style="background:none;border:none;cursor:pointer;color:#888;font-size:1.5rem;line-height:1;padding:0.25rem 0.5rem;" aria-label="Close">&times;</button>
+    </div>
+    <iframe src="https://app.acuityscheduling.com/schedule.php?owner=30616158" title="Book a DEXA Scan" style="flex:1;width:100%;border:none;min-height:520px;"></iframe>
+  </div>
+</div>
+
 <script>
 (function(){
   var btn=document.getElementById('nav-hamburger');
   var links=document.getElementById('nav-links');
   if(btn&&links){btn.addEventListener('click',function(){btn.classList.toggle('open');links.classList.toggle('open');});}
 })();
+
+function openBookingModal(e){
+  if(e)e.preventDefault();
+  var m=document.getElementById('booking-modal');
+  m.style.display='flex';
+  document.body.style.overflow='hidden';
+}
+function closeBookingModal(){
+  var m=document.getElementById('booking-modal');
+  m.style.display='none';
+  document.body.style.overflow='';
+}
+document.getElementById('booking-modal').addEventListener('click',function(e){
+  if(e.target===this)closeBookingModal();
+});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeBookingModal();});
 </script>
 
 </body>
