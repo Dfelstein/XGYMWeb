@@ -239,6 +239,9 @@ footer { background: var(--black); border-top: 1px solid var(--border); padding:
   footer { padding: 2rem 1.5rem; flex-direction: column; align-items: flex-start; }
 }
 </style>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-9C1JQLR151"></script>
+  <script src="analytics.js"></script>
 </head>
 <body>
 
@@ -289,21 +292,6 @@ footer { background: var(--black); border-top: 1px solid var(--border); padding:
   }
 })();
 
-function openBookingModal(e){
-  if(e)e.preventDefault();
-  var m=document.getElementById('booking-modal');
-  m.style.display='flex';
-  document.body.style.overflow='hidden';
-}
-function closeBookingModal(){
-  var m=document.getElementById('booking-modal');
-  m.style.display='none';
-  document.body.style.overflow='';
-}
-document.getElementById('booking-modal').addEventListener('click',function(e){
-  if(e.target===this)closeBookingModal();
-});
-document.addEventListener('keydown',function(e){if(e.key==='Escape')closeBookingModal();});
 </script>
 
 <!-- HERO -->
@@ -574,5 +562,6 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')closeBooking
   </div>
 </footer>
 
+<script src="booking.js"></script>
 </body>
 </html>

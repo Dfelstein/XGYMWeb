@@ -352,6 +352,9 @@
       }
     }
   </style>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-9C1JQLR151"></script>
+  <script src="analytics.js"></script>
 </head>
 <body>
 
@@ -567,22 +570,8 @@
   if(btn&&links){btn.addEventListener('click',function(){btn.classList.toggle('open');links.classList.toggle('open');});}
 })();
 
-function openBookingModal(e){
-  if(e)e.preventDefault();
-  var m=document.getElementById('booking-modal');
-  m.style.display='flex';
-  document.body.style.overflow='hidden';
-}
-function closeBookingModal(){
-  var m=document.getElementById('booking-modal');
-  m.style.display='none';
-  document.body.style.overflow='';
-}
-document.getElementById('booking-modal').addEventListener('click',function(e){
-  if(e.target===this)closeBookingModal();
-});
-document.addEventListener('keydown',function(e){if(e.key==='Escape')closeBookingModal();});
 </script>
 
+<script src="booking.js"></script>
 </body>
 </html>

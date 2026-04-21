@@ -408,6 +408,9 @@
       }
     }
   </style>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-9C1JQLR151"></script>
+  <script src="analytics.js"></script>
 </head>
 <body>
 
@@ -477,7 +480,7 @@
 
     <div class="form-container">
       <h3>Send Us a Message</h3>
-      <form action="mailto:admin@xgym.com.au" method="post" enctype="text/plain">
+      <form id="contact-form">
         <div class="form-group">
           <label for="name">Full Name</label>
           <input type="text" id="name" name="name" required>
@@ -501,6 +504,8 @@
             <option value="Personal Training">Personal Training</option>
             <option value="Memberships">Memberships</option>
             <option value="DEXA Scan">DEXA Scan</option>
+            <option value="Metabolic Testing">Metabolic Testing</option>
+            <option value="Blood Panel">Blood Panel</option>
             <option value="Other">Other</option>
           </select>
         </div>
@@ -510,8 +515,62 @@
           <textarea id="message" name="message" required></textarea>
         </div>
 
-        <button type="submit" class="submit-btn">Send Message</button>
+        <button type="submit" class="submit-btn" id="submit-btn">Send Message</button>
+        <p id="form-success" style="display:none;margin-top:1rem;color:#39e07a;font-size:0.95rem;">Thanks! We'll be in touch soon.</p>
+        <p id="form-error" style="display:none;margin-top:1rem;color:#ff5555;font-size:0.95rem;">Something went wrong. Please email us at admin@xgym.com.au</p>
       </form>
+
+      <script>
+      (function(){
+        // Set your Make.com webhook URL here once the scenario is created
+        var WEBHOOK_URL = 'YOUR_MAKE_WEBHOOK_URL';
+
+        document.getElementById('contact-form').addEventListener('submit', function(e){
+          e.preventDefault();
+          var btn = document.getElementById('submit-btn');
+          btn.textContent = 'Sending...';
+          btn.disabled = true;
+
+          var utm = {};
+          try { utm = JSON.parse(sessionStorage.getItem('xgym_utm') || '{}'); } catch(err){}
+
+          var payload = {
+            name: document.getElementById('name').value,
+            email: document.getElementById('email').value,
+            phone: document.getElementById('phone').value,
+            subject: document.getElementById('subject').value,
+            message: document.getElementById('message').value,
+            utm_source: utm.utm_source || '',
+            utm_medium: utm.utm_medium || '',
+            utm_campaign: utm.utm_campaign || '',
+            page: window.location.href
+          };
+
+          fetch(WEBHOOK_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          })
+          .then(function(r){
+            document.getElementById('form-success').style.display = 'block';
+            document.getElementById('contact-form').reset();
+            if(typeof gtag !== 'undefined'){
+              gtag('event', 'lead_form_submit', { subject: payload.subject });
+            }
+            if(typeof fbq !== 'undefined'){
+              fbq('track', 'Lead');
+            }
+          })
+          .catch(function(){
+            document.getElementById('form-error').style.display = 'block';
+          })
+          .finally(function(){
+            btn.textContent = 'Send Message';
+            btn.disabled = false;
+          });
+        });
+      })();
+      </script>
     </div>
   </div>
 </section>
